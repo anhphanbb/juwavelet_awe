@@ -1,0 +1,5 @@
+method,T_mean_K,T_std_K,z_eff_km,extra
+method1_point,187.80908,,86.95598,point_alt_km=86.96
+method2_gauss_fixed,192.2617109297351,8.889772545665043,87.02101317563103,"center_km=87.00, fwhm_km=9.30"
+method3_old_halfmax,193.2117709529258,11.000936671209667,86.66923849809784,"center_km=86.57, fwhm_km=11.86, z_left_km=80.64, z_right_km=92.50"
+method4_ohver_shifted,193.03144067444657,11.408925975893998,87.31756828601722,shift_km=-0.75
