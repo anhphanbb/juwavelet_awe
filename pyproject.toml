@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "juwavelet"
+maintainers = [ {name = "Joern Ungermann", email = "j.ungermann@fz-juelich.de"} ]
+description = "A toolset to compute the continuous wavelet transform in both directions employing the Morlet wavelet"
+keywords = ["satellite data", "planetary waves", "atmospheric waves", "signal analysis"]
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE.md" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+]
+dynamic = ["dependencies", "version"]
+
+[project.optional-dependencies]
+compiled = ["numba", "mkl_fft"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.packages.find]
+where = ["."]
+exclude = ["juwavelet/_tests", "examples*"]
+
+[tool.setuptools_scm]
+version_file = "juwavelet/_version.py"

@@ -1,0 +1,7 @@
+juwavelet/_version.py
+build
+dist
+juwavelet.egg-info
+__pycache__
+.coverage
+report.xml
