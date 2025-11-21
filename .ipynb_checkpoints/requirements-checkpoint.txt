@@ -1,0 +1,4 @@
+cmocean
+tqdm
+numpy>=1.6
+matplotlib
