@@ -5,6 +5,11 @@ import matplotlib
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1.axes_grid import ImageGrid
 
+VERBOSE = True   # set to False to silence prints
+
+def log(*args, **kwargs):
+    if VERBOSE:
+        print(*args, **kwargs)
 
 def cone_of_influence_1d(dec):
     nx = dec["decomposition"].shape[1]
@@ -132,9 +137,9 @@ def identify_cluster2d(decomposition, min_amp=2, thr=0.5):
         amps.append(wmax)
         udx = np.unravel_index(adec.argmax(), adec.shape)
         idxs.append(udx)
-        print("------------")
-        print("cluster=", j)
-        print("amplitude=", wmax, "idx=", udx)
+        log("------------")
+        log("cluster=", j)
+        log("amplitude=", wmax, "idx=", udx)
         sel[:] = False
         sel[udx] = True
         last_max = wmax
@@ -186,7 +191,7 @@ def identify_cluster2d(decomposition, min_amp=2, thr=0.5):
                 sel2 |= new2
             sel[ix, iy, :, :] = sel2
 
-        print("selected elements:", sel.sum())
+        log("selected elements:", sel.sum())
         adec[sel] = 0
         iwave[sel] = j
 
