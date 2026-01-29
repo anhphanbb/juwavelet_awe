@@ -1,0 +1,5 @@
+Cluster power ranking (clustered only)
+rank  kcl      P_abs           P_pct
+   1    0   2.283941e+03    54.65%
+   2    1   1.268564e+03    30.36%
+   3    2   6.264603e+02    14.99%
