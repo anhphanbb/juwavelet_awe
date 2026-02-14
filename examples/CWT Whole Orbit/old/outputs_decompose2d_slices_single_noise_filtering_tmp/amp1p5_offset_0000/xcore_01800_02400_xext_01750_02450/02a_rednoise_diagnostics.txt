@@ -1,0 +1,14 @@
+Red noise filter diagnostics
+
+name                = amp1p5
+WHITE_NOISE_THRESHOLD = 0.15
+WPS_NOISE_THRESHOLD   = 8.0
+
+n_coeff_total        = 22680000
+n_zero_after_white   = 8839408
+n_zero_after_scaled  = 22578179
+sMAD_WPS min         = 0.043161181864649324
+sMAD_WPS median      = 0.046249398613850315
+WPS_scaled min       = -0.6744907594765952
+WPS_scaled median    = 3.828146876270089e-17
+WPS_scaled max       = 47.9984509633268

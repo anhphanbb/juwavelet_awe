@@ -1,0 +1,6 @@
+L6A file: awe_l6a_tmp_2024165T2120_03175_v01.nc
+L6C file: awe_l6c_q20_2024165T2120_03175_v01.nc
+Slice: 6
+
+cluster_a  best_cluster_c  passes  score    iou    inter  lam_ratio  ang_diff_deg  thetaA_deg  thetaC_deg  lamA_med  lamC_med
+       55             625       0   0.025  0.030    177     1.189           0.0       110.0       110.0      58.7      49.4

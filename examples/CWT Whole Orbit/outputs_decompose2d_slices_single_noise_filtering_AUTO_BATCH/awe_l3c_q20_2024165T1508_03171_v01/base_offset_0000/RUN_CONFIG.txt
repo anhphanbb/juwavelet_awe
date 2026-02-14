@@ -1,0 +1,7 @@
+name = base
+MIN_AMP = 0.2
+THR = 0.1
+WHITE_NOISE_THRESHOLD = 0.02
+WPS_NOISE_THRESHOLD = 8.0
+product_type = l3c
+file = awe_l3c_q20_2024165T1508_03171_v01.nc

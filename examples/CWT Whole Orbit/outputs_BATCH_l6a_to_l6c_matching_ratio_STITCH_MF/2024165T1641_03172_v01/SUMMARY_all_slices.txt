@@ -1,0 +1,13 @@
+L6A: l6/awe_l6a_tmp_2024165T1641_03172_v01.nc
+L6C: l6/awe_l6c_q20_2024165T1641_03172_v01.nc
+
+slice  nA  nC  nBestSaved  nPassed  note
+    0   1  72           1        0  ok
+    1   4  91           4        3  ok
+    2  35  95          35       10  ok
+    3  64  92          64       35  ok
+    4  25  135          25       14  ok
+    5  15  45          15        7  ok
+    6   4  12           4        1  ok
+    7   6   7           6        1  ok
+    8  24   9          24        6  ok

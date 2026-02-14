@@ -1,0 +1,10 @@
+cluster_a  cluster_c  passes  score    iou    inter  lam_ratio  ang_diff_deg  thetaA_deg  thetaC_deg  lamA_med  lamC_med
+        0          0       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0          1       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0          2       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0          3       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0          4       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0          5       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0          6       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0          7       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0          8       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan

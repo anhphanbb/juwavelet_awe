@@ -1,0 +1,13 @@
+Cluster power ranking (clustered only)
+
+name = wnoisep1
+MIN_AMP = 1.2
+THR = 0.25
+WHITE_NOISE_THRESHOLD = 0.1
+WPS_NOISE_THRESHOLD = 8.0
+
+rank  kcl      P_abs           P_pct
+   1    2   5.582920e+03    55.14%
+   2    1   2.561767e+03    25.30%
+   3    0   1.621706e+03    16.02%
+   4    3   3.578681e+02     3.53%

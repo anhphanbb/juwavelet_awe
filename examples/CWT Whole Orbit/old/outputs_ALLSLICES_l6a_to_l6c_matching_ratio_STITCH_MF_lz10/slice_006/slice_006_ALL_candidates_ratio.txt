@@ -1,0 +1,29 @@
+L6A file: awe_l6a_tmp_2024165T2120_03175_v01.nc
+L6C file: awe_l6c_q20_2024165T2120_03175_v01.nc
+Slice: 6
+
+cluster_a  cluster_c  passes  score    iou    inter  lam_ratio  ang_diff_deg  thetaA_deg  thetaC_deg  lamA_med  lamC_med
+       55        625       0   0.030  0.035    708     1.189           0.0       110.0       110.0      58.7      49.4
+       55        629       1   0.008  0.072    764     1.091           7.8       110.0       117.8      58.7      53.8
+       55        632       0   0.005  0.037    544     1.542           3.5       110.0       106.5      58.7      38.1
+       55        616       0   0.004  0.112   1488     1.091          27.3       110.0       137.3      58.7      64.0
+       55        623       0   0.002  0.098   1212     1.414          30.0       110.0        80.0      58.7      83.0
+       55        609       0   0.001  0.010    508     1.189          10.0       110.0       120.0      58.7      49.4
+       55        628       0   0.000  0.054    436     2.000          59.3       100.7       160.0      58.7     117.4
+       55        614       0   0.000  0.019    364     1.542          40.0       110.0        70.0      58.7      90.5
+       55        610       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+       55        611       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+       55        612       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+       55        613       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+       55        615       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+       55        617       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+       55        618       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+       55        619       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+       55        620       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+       55        621       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+       55        622       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+       55        624       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+       55        626       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+       55        627       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+       55        630       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+       55        631       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan

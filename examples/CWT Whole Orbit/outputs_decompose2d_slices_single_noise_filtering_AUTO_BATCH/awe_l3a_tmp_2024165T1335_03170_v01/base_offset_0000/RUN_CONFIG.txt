@@ -1,0 +1,11 @@
+name = base
+MIN_AMP = 1.25
+THR = 0.6
+WHITE_NOISE_THRESHOLD = 0.1
+WPS_NOISE_THRESHOLD = 8.0
+product_type = l3a
+file = awe_l3a_tmp_2024165T1335_03170_v01.nc
+x_trim_kept = [233:5225]
+x_base_unbinned = 233
+X_OFFSET_global = 0
+X_OFFSET_trimmed_local = 0

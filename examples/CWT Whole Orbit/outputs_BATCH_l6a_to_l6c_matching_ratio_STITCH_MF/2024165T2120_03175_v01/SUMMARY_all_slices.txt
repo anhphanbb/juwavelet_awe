@@ -1,0 +1,13 @@
+L6A: l6/awe_l6a_tmp_2024165T2120_03175_v01.nc
+L6C: l6/awe_l6c_q20_2024165T2120_03175_v01.nc
+
+slice  nA  nC  nBestSaved  nPassed  note
+    0   2  43           2        2  ok
+    1  24  65          24        8  ok
+    2   6  29           6        3  ok
+    3   2  22           2        0  ok
+    4   1  106           1        1  ok
+    5  20  609          20       18  ok
+    6   1  64           1        0  ok
+    7   9   0           0        0  no L6C clusters
+    8  12   2          12        2  ok

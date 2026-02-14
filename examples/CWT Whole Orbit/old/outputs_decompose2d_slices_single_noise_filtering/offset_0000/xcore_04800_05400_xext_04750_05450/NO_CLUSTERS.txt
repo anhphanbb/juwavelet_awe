@@ -1,0 +1,3 @@
+No clusters found.
+Try lowering MIN_AMP or THR.
+If red noise filter is on, try lowering WPS_NOISE_THRESHOLD (eg 6) or WHITE_NOISE_THRESHOLD.

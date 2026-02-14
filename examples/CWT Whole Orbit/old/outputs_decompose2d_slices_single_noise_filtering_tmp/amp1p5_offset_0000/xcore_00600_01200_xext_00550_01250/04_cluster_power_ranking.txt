@@ -1,0 +1,16 @@
+Cluster power ranking (clustered only)
+
+name = amp1p5
+MIN_AMP = 1.5
+THR = 0.25
+WHITE_NOISE_THRESHOLD = 0.15
+WPS_NOISE_THRESHOLD = 8.0
+
+rank  kcl      P_abs           P_pct
+   1    2   3.976186e+04    44.86%
+   2    0   1.817577e+04    20.50%
+   3    1   1.680821e+04    18.96%
+   4    4   5.977644e+03     6.74%
+   5    3   3.941963e+03     4.45%
+   6    6   2.990733e+03     3.37%
+   7    5   9.855973e+02     1.11%

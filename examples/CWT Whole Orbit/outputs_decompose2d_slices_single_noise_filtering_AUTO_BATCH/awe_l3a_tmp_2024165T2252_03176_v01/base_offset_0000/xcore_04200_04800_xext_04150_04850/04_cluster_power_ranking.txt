@@ -1,0 +1,19 @@
+Cluster power ranking (clustered only)
+
+name = base
+MIN_AMP = 1.25
+THR = 0.6
+WHITE_NOISE_THRESHOLD = 0.1
+WPS_NOISE_THRESHOLD = 8.0
+
+rank  kcl      P_abs           P_pct
+   1    3   9.165450e+04    27.54%
+   2    0   9.018777e+04    27.10%
+   3    2   3.483073e+04    10.47%
+   4    4   2.976998e+04     8.95%
+   5    6   2.819178e+04     8.47%
+   6    9   2.536467e+04     7.62%
+   7    5   2.284279e+04     6.86%
+   8    7   5.014564e+03     1.51%
+   9    1   3.084834e+03     0.93%
+  10    8   1.842137e+03     0.55%

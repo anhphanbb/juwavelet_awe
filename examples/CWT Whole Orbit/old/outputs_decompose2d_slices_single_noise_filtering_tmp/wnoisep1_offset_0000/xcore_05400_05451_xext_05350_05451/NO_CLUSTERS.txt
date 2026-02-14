@@ -1,0 +1,8 @@
+No clusters found.
+
+Run name: wnoisep1
+Used MIN_AMP=1.2, THR=0.25
+Used WHITE_NOISE_THRESHOLD=0.1, WPS_NOISE_THRESHOLD=8.0
+
+Try lowering MIN_AMP or THR.
+If red noise filter is on, try lowering WPS_NOISE_THRESHOLD or WHITE_NOISE_THRESHOLD.

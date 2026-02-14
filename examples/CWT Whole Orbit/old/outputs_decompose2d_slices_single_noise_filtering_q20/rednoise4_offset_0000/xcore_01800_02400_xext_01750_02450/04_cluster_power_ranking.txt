@@ -1,0 +1,19 @@
+Cluster power ranking (clustered only)
+
+name = rednoise4
+MIN_AMP = 0.2
+THR = 0.1
+WHITE_NOISE_THRESHOLD = 0.03
+WPS_NOISE_THRESHOLD = 4.0
+
+rank  kcl      P_abs           P_pct
+   1    1   2.940436e+03    30.85%
+   2    0   2.599133e+03    27.27%
+   3    4   1.025522e+03    10.76%
+   4    8   9.887268e+02    10.37%
+   5    3   5.822359e+02     6.11%
+   6    5   5.244348e+02     5.50%
+   7    7   2.534885e+02     2.66%
+   8    2   2.504800e+02     2.63%
+   9    6   1.856265e+02     1.95%
+  10    9   1.825243e+02     1.91%

@@ -1,0 +1,8 @@
+No clusters found.
+
+Run name: amp0p25
+Used MIN_AMP=0.25, THR=0.1
+Used WHITE_NOISE_THRESHOLD=0.03, WPS_NOISE_THRESHOLD=8.0
+
+Try lowering MIN_AMP or THR.
+If red noise filter is on, try lowering WPS_NOISE_THRESHOLD or WHITE_NOISE_THRESHOLD.
