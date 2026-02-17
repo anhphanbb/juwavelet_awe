@@ -1,16 +1,17 @@
 Input dir: /Users/anhphan/juwavelet_awe/examples/CWT Whole Orbit/l6
 Output nc dir (l7): /Users/anhphan/juwavelet_awe/examples/CWT Whole Orbit/l7
+Outroot: /Users/anhphan/juwavelet_awe/examples/CWT Whole Orbit/outputs_BATCH_l6a_to_l6c_matching_ratio_STITCH_MF
 Pairs found: 9
 Success: 9
 Fail: 0
 
 Per pair:
 2024165T1335_03170_v01  ok=True  n_passed=22  l7a=l7/awe_l7a_tmp_2024165T1335_03170_v01.nc
-2024165T1508_03171_v01  ok=True  n_passed=38  l7a=l7/awe_l7a_tmp_2024165T1508_03171_v01.nc
-2024165T1641_03172_v01  ok=True  n_passed=77  l7a=l7/awe_l7a_tmp_2024165T1641_03172_v01.nc
-2024165T1814_03173_v01  ok=True  n_passed=18  l7a=l7/awe_l7a_tmp_2024165T1814_03173_v01.nc
-2024165T2120_03175_v01  ok=True  n_passed=34  l7a=l7/awe_l7a_tmp_2024165T2120_03175_v01.nc
-2024165T2252_03176_v01  ok=True  n_passed=73  l7a=l7/awe_l7a_tmp_2024165T2252_03176_v01.nc
-2024166T0025_03177_v01  ok=True  n_passed=69  l7a=l7/awe_l7a_tmp_2024166T0025_03177_v01.nc
-2024166T0158_03178_v01  ok=True  n_passed=222  l7a=l7/awe_l7a_tmp_2024166T0158_03178_v01.nc
-2024166T0331_03179_v01  ok=True  n_passed=488  l7a=l7/awe_l7a_tmp_2024166T0331_03179_v01.nc
+2024165T1508_03171_v01  ok=True  n_passed=32  l7a=l7/awe_l7a_tmp_2024165T1508_03171_v01.nc
+2024165T1641_03172_v01  ok=True  n_passed=69  l7a=l7/awe_l7a_tmp_2024165T1641_03172_v01.nc
+2024165T1814_03173_v01  ok=True  n_passed=22  l7a=l7/awe_l7a_tmp_2024165T1814_03173_v01.nc
+2024165T2120_03175_v01  ok=True  n_passed=30  l7a=l7/awe_l7a_tmp_2024165T2120_03175_v01.nc
+2024165T2252_03176_v01  ok=True  n_passed=59  l7a=l7/awe_l7a_tmp_2024165T2252_03176_v01.nc
+2024166T0025_03177_v01  ok=True  n_passed=47  l7a=l7/awe_l7a_tmp_2024166T0025_03177_v01.nc
+2024166T0158_03178_v01  ok=True  n_passed=254  l7a=l7/awe_l7a_tmp_2024166T0158_03178_v01.nc
+2024166T0331_03179_v01  ok=True  n_passed=526  l7a=l7/awe_l7a_tmp_2024166T0331_03179_v01.nc

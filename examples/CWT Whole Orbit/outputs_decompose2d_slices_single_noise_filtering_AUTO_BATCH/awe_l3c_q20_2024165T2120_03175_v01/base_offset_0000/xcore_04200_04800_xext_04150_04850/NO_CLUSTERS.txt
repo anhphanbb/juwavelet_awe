@@ -1,7 +1,7 @@
 No clusters found.
 
 Run name: base
-Used MIN_AMP=0.2, THR=0.1
+Used MIN_AMP=0.2, THR=0.15
 Used WHITE_NOISE_THRESHOLD=0.02, WPS_NOISE_THRESHOLD=8.0
 
 Try lowering MIN_AMP or THR.

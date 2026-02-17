@@ -1,4 +1,8 @@
 juwavelet/_version.py
+examples/CWT Whole Orbit/l3
+examples/CWT Whole Orbit/l6
+examples/CWT Whole Orbit/l7
+examples/CWT Whole Orbit/old
 build
 dist
 juwavelet.egg-info

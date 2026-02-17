@@ -2,11 +2,11 @@ L6A: l6/awe_l6a_tmp_2024166T0025_03177_v01.nc
 L6C: l6/awe_l6c_q20_2024166T0025_03177_v01.nc
 
 slice  nA  nC  nBestSaved  nPassed  note
-    0  20  209          20       20  ok
-    1  30  125          30       25  ok
-    2   6  13           6        2  ok
-    3   2  34           2        1  ok
-    4  16  36          16        5  ok
-    5   6  35           6        1  ok
-    7  53  112          53       13  ok
-    8  29  22          29        2  ok
+    0  33  300          33       26  ok
+    1   5  47           5        5  ok
+    2   6  13           6        4  ok
+    3  12  46          12        1  ok
+    4  10  40          10        3  ok
+    5   1  33           1        0  ok
+    7  62  95          62        8  ok
+    8   1   0           0        0  no L6C clusters

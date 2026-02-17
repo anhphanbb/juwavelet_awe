@@ -1,6 +1,12 @@
 cluster_a  best_cluster_c  passes  score    iou    inter  lam_ratio  ang_diff_deg  thetaA_deg  thetaC_deg  lamA_med  lamC_med
-        4             421       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        5             433       0   0.012  0.157   4276     1.414           7.9        97.9        90.0      53.8      76.1
-        6             421       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        7             421       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        8             433       0   0.009  0.113   1748     4.000           2.2        92.2        90.0      19.0      76.1
+        2             441       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        3             441       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        4             441       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        5             441       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        6             441       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        7             441       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        8             441       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        9             441       0   0.000  0.000      8     1.414          90.0       100.0        10.0      69.8      98.7
+       10             441       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+       11             441       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+       12             441       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan

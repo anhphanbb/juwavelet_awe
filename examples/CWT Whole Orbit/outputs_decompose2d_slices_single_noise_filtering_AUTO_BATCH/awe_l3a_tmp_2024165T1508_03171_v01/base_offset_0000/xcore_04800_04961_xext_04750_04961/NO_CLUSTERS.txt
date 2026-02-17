@@ -1,0 +1,8 @@
+No clusters found.
+
+Run name: base
+Used MIN_AMP=1.25, THR=0.6
+Used WHITE_NOISE_THRESHOLD=0.1, WPS_NOISE_THRESHOLD=8.0
+
+Try lowering MIN_AMP or THR.
+If red noise filter is on, try lowering WPS_NOISE_THRESHOLD or WHITE_NOISE_THRESHOLD.

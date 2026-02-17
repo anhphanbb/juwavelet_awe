@@ -1,7 +1,11 @@
 name = base
 MIN_AMP = 0.2
-THR = 0.1
+THR = 0.15
 WHITE_NOISE_THRESHOLD = 0.02
 WPS_NOISE_THRESHOLD = 8.0
 product_type = l3c
 file = awe_l3c_q20_2024165T2252_03176_v01.nc
+x_trim_kept = [245:5219]
+x_base_unbinned = 245
+X_OFFSET_global = 0
+X_OFFSET_trimmed_local = 0

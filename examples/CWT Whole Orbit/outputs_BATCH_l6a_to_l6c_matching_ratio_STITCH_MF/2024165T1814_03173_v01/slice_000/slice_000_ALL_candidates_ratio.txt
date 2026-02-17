@@ -1,59 +1,53 @@
 cluster_a  cluster_c  passes  score    iou    inter  lam_ratio  ang_diff_deg  thetaA_deg  thetaC_deg  lamA_med  lamC_med
-        0          0       0   0.026  0.395  20324     1.414           9.8         9.8         0.0      76.1     107.6
-        0          1       0   0.021  0.515  18752     1.189          19.8         9.7       169.9      76.1      64.0
-        0          2       0   0.015  0.489  19080     1.542          19.6         9.6       170.0      76.1     117.4
-        0         15       0   0.015  0.234   4820     1.414          10.0        10.0        20.0      64.0      90.5
-        0         42       1   0.008  0.086   1740     1.000          10.2         9.8        20.0      76.1      76.1
-        0         56       0   0.006  0.105   2140     1.542          10.0        10.0        20.0      76.1      49.4
-        0          7       1   0.006  0.065   1520     1.091           9.7        18.1        27.8      76.1      69.8
-        0         27       0   0.004  0.176   3588     1.297          29.5         9.5       160.0      76.1      58.7
-        0         23       0   0.004  0.141   2872     1.189          28.7         8.7       160.0      76.1      90.5
-        0          9       0   0.004  0.247   5788     1.682          40.8         9.2       148.3      69.8     117.4
-        0         30       0   0.003  0.180   4184     1.000          54.7        10.0       135.3      58.7      58.7
-        0          3       0   0.003  0.119   2776     1.189          33.1        14.2       161.1      76.1      64.0
-        0         64       0   0.003  0.050   1016     1.682          10.0        10.0        20.0      53.8      32.0
-        0         10       0   0.002  0.225   5584     1.000          90.0        10.0       100.0      76.1      76.1
-        0         40       0   0.002  0.070   1432     2.828          10.1         9.9        20.0      76.1      26.9
-        0         19       0   0.002  0.168   6116     1.000          78.1         9.8       111.8      76.1      76.1
-        0         43       0   0.002  0.054   1100     2.594          11.0        10.0        21.0      69.8      26.9
-        0          5       0   0.002  0.178   6392     1.542          71.7         9.9        81.6      76.1     117.4
-        0         22       0   0.001  0.232   6948     1.834          87.4        10.3       102.9      76.1      41.5
-        0         58       0   0.001  0.108   2652     1.297          66.9        10.0       123.1      64.0      49.4
-        0          4       0   0.001  0.093   5988     1.000          76.2        10.8        87.1      76.1      76.1
-        0          6       0   0.001  0.081   2044     1.189          62.9        17.1        80.0      76.1      64.0
-        0         26       0   0.001  0.088   2120     1.000          88.8        10.0        98.8      53.8      53.8
-        0         21       0   0.001  0.043    940     1.189          40.0        20.0        60.0      76.1      90.5
-        0         67       0   0.001  0.038    768     4.000          10.0        10.0        20.0      76.1      19.0
-        0          8       0   0.001  0.177   4712     2.594          80.5        10.0       109.5      76.1      29.3
-        0         24       0   0.001  0.032    684     1.542          30.0        20.0        50.0      76.1     117.4
-        0         48       0   0.001  0.071   1692     1.542          70.0        10.0       120.0      98.7      64.0
-        0         16       0   0.001  0.082   1836     1.542          86.5        16.5       110.0      76.1     117.4
-        0         33       0   0.000  0.100   2296     3.084          68.3        10.0       121.7      98.7      32.0
-        0         28       0   0.000  0.042    856     1.542          80.0        10.0       110.0      76.1     117.4
-        0         69       0   0.000  0.031    684     1.414          71.8        18.2        90.0      76.1      53.8
-        0         61       0   0.000  0.022    444     1.091          70.0        10.0        80.0      76.1      69.8
-        0         36       0   0.000  0.044   1032     2.000          80.6        19.9       100.4      76.1      38.1
-        0         29       0   0.000  0.006    140     1.189          70.0        10.0       120.0      76.1      90.5
-        0         38       0   0.000  0.000      4     1.297          20.0        20.0        40.0      76.1      98.7
+        0          0       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0          1       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0          2       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0          3       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0          4       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0          5       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0          6       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0          7       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0          8       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0          9       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         10       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         11       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         12       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         13       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         14       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         15       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         16       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         17       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         18       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         19       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         20       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         21       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         22       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         23       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         24       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         25       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         26       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         27       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         28       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         29       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         30       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         31       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         32       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         33       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         34       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         35       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         36       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         37       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         38       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         39       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         40       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         41       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         42       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         43       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         44       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         45       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         46       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         47       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         48       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         49       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         50       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         51       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
@@ -61,291 +55,85 @@ cluster_a  cluster_c  passes  score    iou    inter  lam_ratio  ang_diff_deg  th
         0         53       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         54       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         55       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         56       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         57       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         58       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         59       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         60       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         61       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         62       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         63       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         64       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         65       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         66       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        0         67       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         0         68       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        1          0       0   0.091  0.322  16580     1.297           1.7         1.7         0.0      83.0     107.6
-        1          1       0   0.026  0.468  16384     1.297          12.8         1.7       169.0      83.0      64.0
-        1          2       0   0.024  0.439  16580     1.414          11.7         1.7       170.0      83.0     117.4
-        1         15       0   0.009  0.306   5080     1.682          20.0         0.0        20.0      53.8      90.5
-        1         30       0   0.007  0.328   5856     1.000          46.2         0.0       133.8      58.7      58.7
-        1         42       0   0.006  0.104   1728     1.414          11.9         8.1        20.0     107.6      76.1
-        1         56       0   0.004  0.128   2120     2.181          13.1         6.9        20.0     107.6      49.4
-        1         23       0   0.004  0.136   2332     1.189          28.3         8.3       160.0     107.6      90.5
-        1         27       0   0.003  0.160   2780     1.682          27.2         7.2       160.0     107.6      64.0
-        1         58       0   0.002  0.172   3428     1.189          59.1         0.0       120.9      58.7      49.4
-        1         64       0   0.002  0.071   1180     1.542          20.0         0.0        20.0      49.4      32.0
-        1         43       0   0.002  0.066   1100     1.414          20.5         0.5        21.0      38.1      26.9
-        1         40       0   0.002  0.081   1352     4.000          11.1         8.9        20.0     107.6      26.9
-        1         48       0   0.001  0.149   2804     1.834          60.0         0.0       120.0     117.4      64.0
-        1         33       0   0.001  0.175   3224     2.378          58.5         0.0       121.5      76.1      32.0
-        1         26       0   0.001  0.182   3472     2.000          82.4         0.0        97.6     107.6      53.8
-        1         19       0   0.001  0.106   3696     1.542          68.7         4.0       115.3     107.6      69.8
-        1          8       0   0.001  0.211   4820     3.668          71.9         1.8       109.9      90.5      24.7
-        1         22       0   0.001  0.118   3484     2.594          82.1         3.8       101.8     107.6      41.5
-        1         67       0   0.001  0.046    768     5.657          14.9         5.1        20.0     107.6      19.0
-        1         10       0   0.000  0.062   1560     1.414          88.7         8.7       100.0     107.6      76.1
-        1          9       0   0.000  0.011    268     1.091          40.0        10.0       150.0     107.6     117.4
-        1          5       0   0.000  0.020    752     1.091          85.6        10.0        95.6     107.6     117.4
-        1         28       0   0.000  0.018    300     1.091          80.0        10.0       110.0     107.6     117.4
-        1          4       0   0.000  0.019   1236     1.414          80.7         9.3        90.0     107.6      76.1
-        1         61       0   0.000  0.002     40     1.542          70.0        10.0        80.0     107.6      69.8
+        1          9       1   0.304  0.361   6296     1.189           0.0        90.0        90.0     117.4      98.7
+        1         31       0   0.117  0.180   2824     1.542           0.0        90.0        90.0     117.4      76.1
+        1         19       1   0.006  0.061   1052     1.000          10.0        90.0        80.0     107.6     107.6
+        1         64       0   0.001  0.008    132     7.336           0.0        90.0        90.0     117.4      16.0
+        1         54       0   0.001  0.132   2076     2.378          56.7        90.0        33.3     117.4      49.4
+        1          0       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1          1       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1          2       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1          3       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1          4       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1          5       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1          6       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1          7       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1          8       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1         10       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         11       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         12       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         13       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         14       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1         15       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         16       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         17       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         18       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         20       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         21       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1         22       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1         23       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         24       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         25       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1         26       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1         27       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1         28       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         29       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        1         31       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1         30       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         32       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1         33       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         34       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         35       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         36       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         37       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         38       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         39       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1         40       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         41       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1         42       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1         43       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         44       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         45       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         46       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         47       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1         48       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         49       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         50       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         51       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         52       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         53       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        1         54       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         55       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1         56       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         57       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1         58       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         59       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         60       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1         61       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         62       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         63       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         65       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         66       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
+        1         67       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
         1         68       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        1         69       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2          0       0   0.039  0.078   4032     2.000           0.0         0.0         0.0      22.6      45.3
-        2         43       0   0.006  0.153    680     1.189          20.6         0.0        20.6      22.6      26.9
-        2         64       0   0.005  0.139    636     1.414          20.0         0.0        20.0      22.6      32.0
-        2         67       0   0.004  0.093    408     1.000          20.0         0.0        20.0      19.0      19.0
-        2         15       0   0.004  0.333   2276     4.000          20.0         0.0        20.0      22.6      90.5
-        2          1       0   0.004  0.116   4032     2.828          10.0         0.0       170.0      22.6      64.0
-        2         56       0   0.003  0.119    656     2.181          20.0         0.0        20.0      20.7      45.3
-        2          2       0   0.002  0.107   4032     4.000          10.0         0.0       170.0      22.6      90.5
-        2         30       0   0.002  0.186   1744     2.594          39.3         0.0       140.7      22.6      58.7
-        2         27       0   0.002  0.103    712     2.828          20.0         0.0       160.0      22.6      64.0
-        2         40       0   0.002  0.047    244     1.297          20.0         0.0        20.0      19.0      24.7
-        2         42       0   0.001  0.076    408     4.362          20.0         0.0        20.0      19.0      83.0
-        2         33       0   0.001  0.068    576     1.414          57.9         0.0       122.1      22.6      32.0
-        2          8       0   0.001  0.069    968     1.297          73.1         0.0       106.9      19.0      24.7
-        2         58       0   0.001  0.088    876     2.181          56.3         0.0       123.7      22.6      49.4
-        2         23       0   0.001  0.069    448     4.757          20.0         0.0       160.0      19.0      90.5
-        2         26       0   0.001  0.106    960     2.378          80.0         0.0       100.0      22.6      53.8
-        2         22       0   0.000  0.029    588     2.000          70.9         0.0       109.1      19.0      38.1
-        2         48       0   0.000  0.017    148     2.828          60.0         0.0       120.0      22.6      64.0
-        2         10       0   0.000  0.015    208     4.173          80.0         0.0       100.0      18.2      76.1
-        2         19       0   0.000  0.010    260     4.000          70.0         0.0       110.0      19.0      76.1
-        2          4       0   0.000  0.002    108     4.000          90.0         0.0        90.0      19.0      76.1
-        2          3       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2          5       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2          6       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2          7       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2          9       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         11       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         12       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         13       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         14       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         16       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         17       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         18       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         20       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         21       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         24       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         25       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         28       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         29       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         31       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         32       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         34       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         35       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         36       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         37       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         38       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         39       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         41       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         44       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         45       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         46       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         47       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         49       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         50       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         51       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         52       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         53       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         54       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         55       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         57       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         59       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         60       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         61       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         62       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         63       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         65       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         66       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         68       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        2         69       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3          1       0   0.249  0.562  21316     1.297           0.7       168.9       169.6      83.0      64.0
-        3          2       0   0.180  0.537  21720     1.414           1.1       168.9       170.0      83.0     117.4
-        3          3       0   0.072  0.184   4688     1.414           0.8       163.0       163.8      83.0      58.7
-        3          0       0   0.027  0.475  24416     1.414          11.6       168.4         0.0      83.0     117.4
-        3          9       0   0.013  0.325   8180     1.414          17.2       165.3       148.1      83.0     117.4
-        3         23       1   0.010  0.118   2872     1.091          10.0       170.0       160.0      83.0      90.5
-        3         27       0   0.009  0.145   3560     1.414          10.0       170.0       160.0      83.0      58.7
-        3         15       0   0.006  0.198   4872     1.091          30.0       170.0        20.0      98.7      90.5
-        3         10       0   0.004  0.274   7408     1.091          67.0       167.0       100.0      83.0      76.1
-        3         19       0   0.003  0.201   7792     1.189          55.7       167.7       112.0      83.0      69.8
-        3         30       0   0.003  0.169   4556     1.682          36.6       170.0       133.4      98.7      58.7
-        3         22       0   0.002  0.289   9176     2.000          64.0       167.2       103.2      83.0      41.5
-        3         42       0   0.002  0.071   1740     1.091          30.0       170.0        20.0      83.0      76.1
-        3          5       0   0.002  0.238   8900     1.414          85.8       166.0        80.2      83.0     117.4
-        3         16       0   0.002  0.129   3224     1.414          52.9       162.9       110.0      83.0     117.4
-        3         56       0   0.002  0.088   2140     1.682          30.0       170.0        20.0      83.0      49.4
-        3          7       0   0.002  0.113   2924     1.414          46.9       162.5        29.5      83.0      58.7
-        3          4       0   0.001  0.128   8412     1.091          79.9       166.1        86.2      83.0      76.1
-        3          6       0   0.001  0.145   3972     1.297          82.3       162.3        80.0      83.0      64.0
-        3         26       0   0.001  0.086   2416     1.000          71.4       170.0        98.6      53.8      53.8
-        3         58       0   0.001  0.106   2996     2.000          47.0       170.0       123.0      98.7      49.4
-        3         21       0   0.001  0.084   2084     1.091          76.9       163.1        60.0      83.0      90.5
-        3         48       0   0.001  0.077   2104     1.682          50.0       170.0       120.0     107.6      64.0
-        3          8       0   0.001  0.167   5080     3.084          60.1       170.0       109.9      90.5      29.3
-        3         64       0   0.001  0.040    984     1.542          30.0       170.0        20.0      49.4      32.0
-        3         24       0   0.001  0.069   1684     1.414          66.5       163.5        50.0      83.0     117.4
-        3         36       0   0.001  0.096   2508     2.181          62.0       162.6       100.6      83.0      38.1
-        3         40       0   0.001  0.059   1432     3.084          30.0       170.0        20.0      83.0      26.9
-        3         33       0   0.001  0.100   2676     3.364          48.4       170.0       121.6     107.6      32.0
-        3         43       0   0.000  0.045   1100     3.084          31.0       170.0        21.0      83.0      26.9
-        3         69       0   0.000  0.045   1168     1.542          72.4       162.4        90.0      83.0      53.8
-        3         28       0   0.000  0.034    824     1.414          60.0       170.0       110.0      83.0     117.4
-        3         39       0   0.000  0.035    912     1.682          58.2       160.1       102.0      83.0      49.4
-        3         67       0   0.000  0.031    768     4.362          30.0       170.0        20.0      83.0      19.0
-        3         61       0   0.000  0.018    432     1.297          90.0       170.0        80.0      90.5      69.8
-        3         29       0   0.000  0.004    116     1.000          50.0       170.0       120.0      90.5      90.5
-        3         38       0   0.000  0.001     20     3.364          50.0       170.0        40.0      29.3      98.7
-        3         34       0   0.000  0.000     12     3.668          40.0       170.0       130.0      29.3     107.6
-        3         11       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         12       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         13       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         14       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         17       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         18       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         20       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         25       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         31       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         32       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         35       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         37       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         41       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         44       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         45       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         46       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         47       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         49       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         50       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         51       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         52       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         53       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         54       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         55       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         57       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         59       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         60       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         62       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         63       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         65       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         66       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        3         68       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        4          4       0   0.073  0.420  33632     1.682           2.4        89.2        91.6     117.4      69.8
-        4          5       1   0.067  0.280  18780     1.000           3.2        88.8        85.6     117.4     117.4
-        4         18       0   0.030  0.036   2852     1.189           0.0        90.0        90.0     117.4      98.7
-        4         26       0   0.015  0.052   3440     2.378           0.4       100.0        99.6     117.4      49.4
-        4         32       0   0.015  0.016   1060     1.091           0.0        90.0        90.0     117.4     107.6
-        4         19       0   0.009  0.346  22144     1.542          23.1        92.7       115.8     117.4      76.1
-        4         10       0   0.008  0.157  10032     1.542          11.9        88.1       100.0     117.4      76.1
-        4         22       0   0.007  0.247  15956     2.828          10.8        91.3       102.2     117.4      41.5
-        4         20       1   0.007  0.086   5956     1.189           9.9        90.1       100.0     117.4      98.7
-        4          6       0   0.007  0.083   5416     1.834           5.9        85.9        80.0     117.4      64.0
-        4         69       0   0.005  0.012    776     2.181           0.0        90.0        90.0     117.4      53.8
-        4          0       0   0.004  0.389  32336     1.000          85.6        94.4         0.0     117.4     117.4
-        4          2       0   0.004  0.331  25296     1.000          74.8        95.2       170.0     117.4     117.4
-        4          8       0   0.004  0.171  10984     4.000           9.5        97.1       106.6     117.4      29.3
-        4         31       0   0.004  0.181  11736     2.000          21.3        88.7       110.0     117.4      58.7
-        4         58       0   0.003  0.107   6836     2.828          10.3       100.0       110.3     117.4      41.5
-        4         11       0   0.003  0.234  15460     3.668          21.2        90.7       112.0     117.4      32.0
-        4         17       0   0.002  0.108   8572     2.594          16.3        89.3       105.6     117.4      45.3
-        4          1       0   0.002  0.398  28132     2.594          62.8        94.2       157.1     117.4      45.3
-        4         59       0   0.002  0.004    232     1.542           0.0        90.0        90.0     117.4      76.1
-        4         37       0   0.002  0.097   6248     2.000          20.5        88.8        68.3      98.7      49.4
-        4         41       0   0.002  0.097   6352     2.000          22.5        87.5       110.0      98.7      49.4
-        4         48       0   0.002  0.079   5076     1.834          20.0       100.0       120.0     117.4      64.0
-        4         29       0   0.002  0.075   4776     1.297          27.4        92.6       120.0     117.4      90.5
-        4         16       0   0.002  0.048   3104     1.000          23.0        87.0       110.0     117.4     117.4
-        4         36       0   0.002  0.061   3928     2.181          13.8        84.8        98.6      83.0      38.1
-        4          9       0   0.002  0.112   7364     1.000          59.3        88.6       147.9     117.4     117.4
-        4         30       0   0.002  0.107   6896     2.000          31.0       100.0       131.0     117.4      58.7
-        4         25       0   0.002  0.085   5976     2.181          22.6        89.4        66.8      98.7      45.3
-        4         62       0   0.001  0.024   1536     1.189          14.0        84.0        70.0      76.1      64.0
-        4         39       0   0.001  0.035   2288     1.682          19.2        83.4       102.6      83.0      49.4
-        4         45       0   0.001  0.044   2832     4.362           8.8        91.2       100.0     117.4      26.9
-        4         21       0   0.001  0.034   2160     1.297          25.8        85.8        60.0     117.4      90.5
-        4         33       0   0.001  0.078   5024     3.668          22.1        99.3       121.4     117.4      32.0
-        4         24       0   0.001  0.028   1776     1.000          35.7        85.7        50.0     117.4     117.4
-        4         14       0   0.001  0.081   5176     5.187          21.0        92.0       113.0     117.4      22.6
-        4         15       0   0.001  0.074   4752     1.297          80.0       100.0        20.0     117.4      90.5
-        4         51       0   0.001  0.035   2324     1.682          31.4        90.0        58.6      90.5      53.8
-        4         28       0   0.001  0.013    856     1.000          20.0        90.0       110.0     117.4     117.4
-        4         52       0   0.001  0.121   7864     4.757          40.2        93.1       133.3     117.4      24.7
-        4          7       0   0.001  0.057   3712     2.594          37.6        85.0        47.5     107.6      41.5
-        4         61       0   0.000  0.009    588     1.682          10.0        90.0        80.0     117.4      69.8
-        4         23       0   0.000  0.044   2836     1.297          68.5        91.5       160.0     117.4      90.5
-        4         63       0   0.000  0.105   7004     4.362          52.4        93.0       145.4     117.4      26.9
-        4         27       0   0.000  0.056   3576     2.000          67.9        92.0       159.9     117.4      58.7
-        4         66       0   0.000  0.012    760     2.378          11.3        90.0       101.3      90.5      38.1
-        4          3       0   0.000  0.066   4332     2.181          75.9        87.5       163.4     117.4      53.8
-        4         53       0   0.000  0.008    536     1.542          20.0        90.0       110.0     117.4      76.1
-        4         42       0   0.000  0.027   1740     1.542          71.9        91.9        20.0     117.4      76.1
-        4         65       0   0.000  0.046   2972     6.169          32.6        90.0       122.6     117.4      19.0
-        4         56       0   0.000  0.033   2140     2.378          72.7        92.7        20.0     117.4      49.4
-        4         68       0   0.000  0.030   1892     4.000          40.7        98.0       138.7     117.4      29.3
-        4         49       0   0.000  0.042   2912     4.000          61.0        90.0       151.0     117.4      29.3
-        4         47       0   0.000  0.025   1588     6.727          27.2       100.0        72.8     117.4      17.4
-        4         40       0   0.000  0.022   1432     4.362          70.6        90.6        20.0     117.4      26.9
-        4         64       0   0.000  0.018   1124     3.668          80.0       100.0        20.0     117.4      32.0
-        4         43       0   0.000  0.017   1100     4.362          76.6        97.6        21.0     117.4      26.9
-        4         67       0   0.000  0.012    768     6.169          72.0        92.0        20.0     117.4      19.0
-        4         44       0   0.000  0.001     92     4.362          50.0        90.0       140.0     117.4      26.9
-        4         38       0   0.000  0.000     20     1.189          46.0        86.0        40.0     117.4      98.7
-        4         34       0   0.000  0.000     12     1.091          40.0        90.0       130.0     117.4     107.6
-        4         12       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        4         13       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        4         35       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        4         46       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        4         50       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        4         54       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        4         55       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        4         57       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan
-        4         60       0   0.000  0.000      0       nan           nan         nan         nan       nan       nan

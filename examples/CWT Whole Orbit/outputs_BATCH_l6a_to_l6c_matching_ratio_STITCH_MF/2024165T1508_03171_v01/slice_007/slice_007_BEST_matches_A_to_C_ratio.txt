@@ -1,0 +1,3 @@
+cluster_a  best_cluster_c  passes  score    iou    inter  lam_ratio  ang_diff_deg  thetaA_deg  thetaC_deg  lamA_med  lamC_med
+      150             457       1   0.121  0.756  17456     1.091           4.7         2.5         7.2     117.4     107.6
+      151             500       0   0.086  0.212   3504     1.834           0.3       169.7       170.0     117.4      64.0
