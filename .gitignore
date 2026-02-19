@@ -2,7 +2,14 @@ juwavelet/_version.py
 examples/CWT Whole Orbit/l3
 examples/CWT Whole Orbit/l6
 examples/CWT Whole Orbit/l7
+examples/CWT Whole Orbit/l7_old
 examples/CWT Whole Orbit/old
+examples/CWT Whole Orbit/outputs_BATCH_l6a_to_l6c_matching_ratio_STITCH_MF
+examples/CWT Whole Orbit/outputs_decompose2d_slices_single_noise_filtering_AUTO
+examples/CWT Whole Orbit/outputs_decompose2d_slices_single_noise_filtering_AUTO_BATCH
+examples/CWT Whole Orbit/outputs_L7A_MF_cartopy
+examples/CWT Whole Orbit/outputs_L7A_MF_cartopy_andes
+examples/CWT Whole Orbit/outputs_L7A_MF_cartopy_old
 build
 dist
 juwavelet.egg-info

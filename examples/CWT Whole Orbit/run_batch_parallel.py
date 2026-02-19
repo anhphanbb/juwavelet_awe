@@ -40,12 +40,12 @@ except Exception:
 # ==========================
 # DEFAULT PARAMS (same as your notebook cell)
 # ==========================
-DEFAULT_INPUT_FOLDER = Path("l3")
+DEFAULT_INPUT_FOLDER = Path("l3/OneFile")
 DEFAULT_FILE_GLOB = "*.nc"
 
 DEFAULT_OUTPUT_ROOT = Path("outputs_decompose2d_slices_single_noise_filtering_AUTO_BATCH")
 DEFAULT_SAVE_DPI = 200
-DEFAULT_OUTPUT_L6_FOLDER = DEFAULT_INPUT_FOLDER.parent / "l6"
+DEFAULT_OUTPUT_L6_FOLDER = Path("l6/OneFile")
 
 DEFAULT_FRAME_IDX = 0
 DEFAULT_X_CHUNK = 600
@@ -82,7 +82,7 @@ DEFAULT_QUIVER_SCALE = 1
 DEFAULT_APPLY_RED_NOISE_FILTER = True
 
 DEFAULT_SAVE_REDNOISE_DIAGNOSTICS = False
-DEFAULT_SAVE_SLICE_PLOTS = False
+DEFAULT_SAVE_SLICE_PLOTS = True
 DEFAULT_SAVE_STITCHED_PLOT = True
 
 
@@ -543,7 +543,7 @@ def quicklook_background_decomp_4panel_save(
     ]
 
     if wavy_after_noise_xy is not None:
-        panels.append((wavy_after_noise_xy, "Wavy stuff (wavelet reconstruction after noise filtering)"))
+        panels.append((wavy_after_noise_xy, "Wavy stuff (wavelet recon. after noise filtering)"))
 
     im0 = None
     for ax, (Zp, title) in zip(axs, panels):
