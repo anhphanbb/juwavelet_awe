@@ -10,16 +10,23 @@ Example:
 Notes:
 - Parallelizes across files (recommended). Slices remain sequential inside a file.
 - Uses matplotlib Agg backend so no GUI windows.
+
+Option A implemented:
+- Do not trim the whole orbit
+- For each slice:
+  1) slice from raw 2D frame (still has NaNs)
+  2) trim all-NaN edge columns in that slice window
+  3) flatten swath on the trimmed window
+  4) run preprocessing and CWT on the trimmed+flattened window
+  5) pad core outputs back so every slice core has the same width
 """
 
 import os
 import gc
-import copy
 import argparse
 from pathlib import Path
 from typing import Tuple, Dict, Any, List
 
-# IMPORTANT: set backend BEFORE importing pyplot
 import matplotlib
 matplotlib.use("Agg")
 
@@ -38,14 +45,15 @@ except Exception:
 
 
 # ==========================
-# DEFAULT PARAMS (same as your notebook cell)
+# DEFAULT PARAMS
 # ==========================
-DEFAULT_INPUT_FOLDER = Path("l3/OneFile")
+DEFAULT_INPUT_FOLDER = Path("l3_Dominique")
 DEFAULT_FILE_GLOB = "*.nc"
 
 DEFAULT_OUTPUT_ROOT = Path("outputs_decompose2d_slices_single_noise_filtering_AUTO_BATCH")
 DEFAULT_SAVE_DPI = 200
-DEFAULT_OUTPUT_L6_FOLDER = Path("l6/OneFile")
+DEFAULT_OUTPUT_L6_FOLDER = Path("l6")
+DEFAULT_STITCHED_FOLDERNAME = "_STITCHED"   # inside OUTPUT_ROOT
 
 DEFAULT_FRAME_IDX = 0
 DEFAULT_X_CHUNK = 600
@@ -63,9 +71,9 @@ DEFAULT_BIN_FACTOR = 2
 DEFAULT_APPLY_TAPER = True
 DEFAULT_TAPER_EDGE_PIXELS = 10
 
-DEFAULT_S0 = 24     #16
+DEFAULT_S0 = 24
 DEFAULT_DJ = 1 / 8
-DEFAULT_JS = 20       #20
+DEFAULT_JS = 28     # Max wavelength around 272 km
 DEFAULT_JT = 18
 DEFAULT_ASPECT = 1
 
@@ -82,7 +90,7 @@ DEFAULT_QUIVER_SCALE = 1
 DEFAULT_APPLY_RED_NOISE_FILTER = True
 
 DEFAULT_SAVE_REDNOISE_DIAGNOSTICS = False
-DEFAULT_SAVE_SLICE_PLOTS = True
+DEFAULT_SAVE_SLICE_PLOTS = False
 DEFAULT_SAVE_STITCHED_PLOT = True
 
 
@@ -121,17 +129,6 @@ def cleanup_memory() -> None:
     gc.collect()
 
 
-def _fmt(v: float) -> str:
-    if not np.isfinite(v):
-        return "∞"
-    v = float(v)
-    if abs(v) >= 1000 or abs(v) < 0.1:
-        return f"{v:.2e}"
-    if abs(v) >= 100:
-        return f"{v:.0f}"
-    return f"{v:.1f}"
-
-
 def diverging_limits(*arrays: np.ndarray, p_lo: float = 2, p_hi: float = 98) -> Tuple[float, float]:
     vals = []
     for A in arrays:
@@ -162,6 +159,40 @@ def trim_all_nan_edge_columns(Z: np.ndarray) -> Tuple[np.ndarray, int, int]:
     x0 = int(np.argmax(col_has_data))
     x1 = int(len(col_has_data) - np.argmax(col_has_data[::-1]))
     return Z[:, x0:x1], x0, x1
+
+
+def trim_window_all_nan_edges(win: np.ndarray) -> Tuple[np.ndarray, int, int]:
+    win_trim, x0, x1 = trim_all_nan_edge_columns(win)
+    trim_left = int(x0)
+    trim_right = int(win.shape[1] - x1)
+    return win_trim, trim_left, trim_right
+
+
+def crop_pad_core_from_window(
+    A: np.ndarray,
+    *,
+    rel0_binned: int,
+    core_w_binned_target: int,
+    pad_left_binned: int,
+    pad_right_binned: int,
+) -> np.ndarray:
+    nyA, nxA = A.shape
+
+    inner_w = int(core_w_binned_target - pad_left_binned - pad_right_binned)
+    if inner_w < 0:
+        inner_w = 0
+
+    left = max(0, int(rel0_binned))
+    right = min(nxA, left + inner_w)
+    core = A[:, left:right]
+
+    out = np.full((nyA, core_w_binned_target), np.nan, dtype=A.dtype)
+
+    x_ins0 = int(pad_left_binned)
+    x_ins1 = min(core_w_binned_target, x_ins0 + core.shape[1])
+    if x_ins0 < core_w_binned_target and x_ins1 > x_ins0:
+        out[:, x_ins0:x_ins1] = core[:, : (x_ins1 - x_ins0)]
+    return out
 
 
 # --------------------------
@@ -333,18 +364,6 @@ def apply_edge_hanning_taper(Z: np.ndarray, edge: int) -> np.ndarray:
     return Z * W
 
 
-def effective_lambda(cwt: dict, s_idx: int, t_idx: int) -> Tuple[float, float, float]:
-    lamx = float(cwt["wavelength_x"][s_idx, t_idx])
-    lamy = float(cwt["wavelength_y"][s_idx, t_idx])
-    inv2 = 0.0
-    if np.isfinite(lamx) and lamx != 0:
-        inv2 += (1.0 / lamx) ** 2
-    if np.isfinite(lamy) and lamy != 0:
-        inv2 += (1.0 / lamy) ** 2
-    lam = np.inf if inv2 == 0 else 1.0 / np.sqrt(inv2)
-    return lamx, lamy, lam
-
-
 def compute_cluster_power_table(cwt: dict, iwave: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     dec = cwt["decomposition"]
     power4d = np.abs(dec) ** 2
@@ -372,7 +391,7 @@ def cluster_amp_theta_maps(
     kcl: int,
     amp_min_fraction_of_cluster_max: float = 0.2,
 ) -> Tuple[np.ndarray, np.ndarray]:
-    dec = cwt["decomposition"]  # (ns, nt, nx, ny) complex
+    dec = cwt["decomposition"]
     power = np.abs(dec) ** 2
 
     mask4d = (iwave == kcl)
@@ -387,7 +406,6 @@ def cluster_amp_theta_maps(
 
     p = np.where(mask2, power2, -np.inf)
     pmax = np.max(p, axis=0)
-
     valid = np.isfinite(pmax) & (pmax > 0)
 
     A = np.full(nx * ny, np.nan, dtype=float)
@@ -396,10 +414,8 @@ def cluster_amp_theta_maps(
     if np.any(valid):
         arg = np.argmax(p[:, valid], axis=0)
         t_idx = arg % nt
-
         A_valid = np.sqrt(pmax[valid])
         theta_valid = np.asarray(cwt["theta"], dtype=float)[t_idx]
-
         A[valid] = A_valid
         theta[valid] = theta_valid
 
@@ -415,13 +431,6 @@ def cluster_amp_theta_maps(
     return A_xy, theta_xy
 
 
-def theta_to_uv(theta_xy: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
-    return np.cos(theta_xy), np.sin(theta_xy)
-
-
-# --------------------------
-# Red noise style filtering helper
-# --------------------------
 def apply_red_noise_filter_cwt(
     cwt: dict,
     white_noise_threshold: float = 0.1,
@@ -447,8 +456,8 @@ def apply_red_noise_filter_cwt(
     WPS1 = np.abs(dec) ** 2
     diag["n_zero_after_white"] = int(np.count_nonzero(WPS1 == 0))
 
-    median_WPS = np.median(WPS1, axis=(1, 2, 3))  # (ns,)
-    mad = stats.median_abs_deviation(WPS1, axis=(1, 2, 3), scale=1.0)  # (ns,)
+    median_WPS = np.median(WPS1, axis=(1, 2, 3))
+    mad = stats.median_abs_deviation(WPS1, axis=(1, 2, 3), scale=1.0)
     sMAD_WPS = 1.4826 * mad
 
     sMAD_safe = np.where(sMAD_WPS > 0, sMAD_WPS, np.nan)
@@ -478,7 +487,7 @@ def apply_red_noise_filter_cwt(
 
 
 # --------------------------
-# Quicklook plots (true no op if not saving)
+# Quicklook plots
 # --------------------------
 def quicklook_save(
     x1d: np.ndarray,
@@ -562,7 +571,7 @@ def quicklook_background_decomp_4panel_save(
 
 
 # --------------------------
-# Cluster products (for L6C/L6A outputs)
+# Cluster products for outputs
 # --------------------------
 def cluster_dominant_lambda_map(
     cwt: dict,
@@ -570,7 +579,7 @@ def cluster_dominant_lambda_map(
     kcl: int,
     amp_mask_xy: np.ndarray | None = None,
 ) -> np.ndarray:
-    dec = cwt["decomposition"]  # (ns, nt, nx, ny) complex
+    dec = cwt["decomposition"]
     power0 = np.abs(dec) ** 2
     mask4d = (iwave == kcl)
     if not np.any(mask4d):
@@ -726,7 +735,6 @@ def copy_lxc_to_l6x_with_clusters(
         v_slice.long_name = "Slice index (starts at 0) for each cluster"
         v_pabs.units = "arb"
         v_ppct.units = "percent"
-
         v_amp.units = "K" if product_type == "l3a" else "kR"
 
         if ncl == 0:
@@ -774,13 +782,12 @@ def copy_lxc_to_l6x_with_clusters(
 
 
 # --------------------------
-# Slice pipeline (same logic, but uses runtime params dict)
+# Slice pipeline (Option A)
 # --------------------------
 def run_pipeline_for_slice(
-    rad2d_flat: np.ndarray,
+    rad2d_raw: np.ndarray,
     x_slice: slice,
     outdir: Path,
-    x_start_unbinned: int,
     core_start_unbinned: int,
     core_end_unbinned: int,
     x_base_unbinned: int,
@@ -815,12 +822,7 @@ def run_pipeline_for_slice(
     DX_KM_BASE = float(params["DX_KM_BASE"])
     DY_KM_BASE = float(params["DY_KM_BASE"])
 
-    N_SHOW = int(params["N_SHOW"])
     AMP_MIN_FRACTION_OF_CLUSTER_MAX = float(params["AMP_MIN_FRACTION_OF_CLUSTER_MAX"])
-
-    QUIVER_STEP_X = int(params["QUIVER_STEP_X"])
-    QUIVER_STEP_Y = int(params["QUIVER_STEP_Y"])
-    QUIVER_SCALE = float(params["QUIVER_SCALE"])
 
     min_amp = float(cfg.get("MIN_AMP"))
     thr = float(cfg.get("THR"))
@@ -831,7 +833,7 @@ def run_pipeline_for_slice(
     STORE_CLUSTER_RECON = True
 
     if APPLY_BINNING and BIN_FACTOR > 1:
-        f = BIN_FACTOR
+        f = int(BIN_FACTOR)
         dx_km = DX_KM_BASE * f
         dy_km = DY_KM_BASE * f
     else:
@@ -839,32 +841,54 @@ def run_pipeline_for_slice(
         dx_km = DX_KM_BASE
         dy_km = DY_KM_BASE
 
-    core_width_unbinned = int(core_end_unbinned - core_start_unbinned)
-    core_w_binned = core_width_unbinned // f
-    rel0_unbinned = int(core_start_unbinned - x_start_unbinned)
-    rel0_binned = rel0_unbinned // f
-    rel1_binned = rel0_binned + core_w_binned
+    core_width_unbinned_target = int(core_end_unbinned - core_start_unbinned)
+    core_w_binned_target = int(core_width_unbinned_target // f)
 
-    def crop_pad_core(A: np.ndarray) -> np.ndarray:
-        nyA, nxA = A.shape
-        left = max(0, rel0_binned)
-        right = min(nxA, rel1_binned)
-        core = A[:, left:right]
-        need = core_w_binned - core.shape[1]
-        if need > 0:
-            core = np.concatenate([core, np.full((nyA, need), np.nan)], axis=1)
-        elif need < 0:
-            core = core[:, :core_w_binned]
-        return core
+    Y_SLICE = params["Y_SLICE"]
 
-    raw_win = np.asarray(rad2d_flat[params["Y_SLICE"], x_slice], dtype=float)
+    ext_start_unbinned = int(x_slice.start or 0)
+    ext_end_unbinned = int(x_slice.stop)
+
+    raw_win_full = np.asarray(rad2d_raw[Y_SLICE, x_slice], dtype=float)
+
+    raw_win_trim, trimL_cols, trimR_cols = trim_window_all_nan_edges(raw_win_full)
+
+    ext_start_eff = ext_start_unbinned + int(trimL_cols)
+    ext_end_eff = ext_end_unbinned - int(trimR_cols)
+
+    core_start = int(core_start_unbinned)
+    core_end = int(core_end_unbinned)
+
+    core0_eff = max(core_start, ext_start_eff)
+    core1_eff = min(core_end, ext_end_eff)
+
+    pad_left_unbinned = max(0, core0_eff - core_start)
+    pad_right_unbinned = max(0, core_end - core1_eff)
+
+    pad_left_binned = int(pad_left_unbinned // f)
+    pad_right_binned = int(pad_right_unbinned // f)
+
+    rel0_unbinned_eff = int(core0_eff - ext_start_eff)
+    rel0_binned_eff = int(rel0_unbinned_eff // f)
+
+    # flatten AFTER trimming (still has NaNs when trimming runs)
+    raw_win_flat = flatten_swath(raw_win_trim, target_ny=300)
 
     if APPLY_BINNING and BIN_FACTOR > 1:
-        raw_win = bin2d_block_mean(raw_win, BIN_FACTOR)
+        raw_win_flat = bin2d_block_mean(raw_win_flat, BIN_FACTOR)
 
-    ny, nx = raw_win.shape
+    ny, nx = raw_win_flat.shape
     x1d_km = np.arange(nx, dtype=float) * dx_km
     y1d_km = np.arange(ny, dtype=float) * dy_km
+
+    def crop_pad_core(A: np.ndarray) -> np.ndarray:
+        return crop_pad_core_from_window(
+            A,
+            rel0_binned=rel0_binned_eff,
+            core_w_binned_target=core_w_binned_target,
+            pad_left_binned=pad_left_binned,
+            pad_right_binned=pad_right_binned,
+        )
 
     bin_tag = f" (binned {BIN_FACTOR}x{BIN_FACTOR})" if (APPLY_BINNING and BIN_FACTOR > 1) else ""
     label0 = "Temperature" if product_type == "l3a" else "Radiance"
@@ -872,14 +896,18 @@ def run_pipeline_for_slice(
     quicklook_save(
         x1d_km,
         y1d_km,
-        raw_win,
-        f"{label0} (window, flattened){bin_tag}\n{run_name} MIN_AMP={min_amp} THR={thr}",
+        raw_win_flat,
+        (
+            f"{label0} (window, per-slice trim then flatten){bin_tag}\n"
+            f"{run_name} MIN_AMP={min_amp} THR={thr}\n"
+            f"trimL={trimL_cols} trimR={trimR_cols} padL={pad_left_unbinned} padR={pad_right_unbinned}"
+        ),
         outdir / "00_window.png",
         save_plots=SAVE_SLICE_PLOTS,
         save_dpi=SAVE_DPI,
     )
 
-    proc0 = raw_win.astype(float, copy=True)
+    proc0 = raw_win_flat.astype(float, copy=True)
 
     if REMOVE_TREND:
         plane = fit_plane(proc0)
@@ -902,12 +930,13 @@ def run_pipeline_for_slice(
         m = float(np.median(proc))
         s = float(np.std(proc))
         proc = (proc - m) / s if s > 0 else (proc - m)
+
     proc = maybe_blur(proc, GAUSS_BLUR_SIGMA)
 
-    wave_xy = proc.T  # (nx, ny)
+    wave_xy = proc.T
 
     cwt_raw = transform.decompose2d(
-        wave_xy, dx=dx_km, dy=dy_km, s0=S0, dj=DJ, js=JS, jt=JT, aspect=ASPECT
+        wave_xy, dx=dx_km, dy=dy_km, s0=S0, dj=DJ, js=JS, jt=JT, aspect=ASPECT, dtype=np.complex64
     )
 
     if APPLY_RED_NOISE_FILTER:
@@ -938,7 +967,7 @@ def run_pipeline_for_slice(
     else:
         cwt = cwt_raw
 
-    rec_wavy = transform.reconstruct2d(cwt)  # (nx, ny)
+    rec_wavy = transform.reconstruct2d(cwt)
     wavy_xy = rec_wavy.T - np.median(rec_wavy)
 
     quicklook_background_decomp_4panel_save(
@@ -959,7 +988,6 @@ def run_pipeline_for_slice(
     decomposition = cwt["decomposition"]
     orig_decomp = decomposition.copy()
 
-    # plotting overview only when slice plots enabled
     if SAVE_SLICE_PLOTS:
         cmap_cwt = matplotlib.cm.turbo
         norm_cwt = matplotlib.colors.BoundaryNorm(np.exp(np.linspace(np.log(0.05), np.log(1.0), 10)), cmap_cwt.N)
@@ -970,8 +998,6 @@ def run_pipeline_for_slice(
         fig_spec = plt.gcf()
         save_fig(fig_spec, outdir / "03_fov_wavelet_spectrum.png", enable=True, save_dpi=SAVE_DPI)
 
-    bg = remaining_tapered - np.median(remaining_tapered)
-
     cluster_ids, P_abs, P_pct = compute_cluster_power_table(cwt, iwave)
     if cluster_ids.size == 0:
         (outdir / "NO_CLUSTERS.txt").write_text(
@@ -979,8 +1005,7 @@ def run_pipeline_for_slice(
             f"Run name: {run_name}\n"
             f"Used MIN_AMP={min_amp}, THR={thr}\n"
             f"Used WHITE_NOISE_THRESHOLD={white_noise_threshold}, WPS_NOISE_THRESHOLD={wps_noise_threshold}\n\n"
-            "Try lowering MIN_AMP or THR.\n"
-            "If red noise filter is on, try lowering WPS_NOISE_THRESHOLD or WHITE_NOISE_THRESHOLD.\n"
+            f"trimL={trimL_cols} trimR={trimR_cols} padL={pad_left_unbinned} padR={pad_right_unbinned}\n"
         )
         remaining_core_xy = crop_pad_core(proc)
         nan_core = np.full_like(remaining_core_xy, np.nan)
@@ -1017,7 +1042,7 @@ def run_pipeline_for_slice(
         if STORE_CLUSTER_RECON:
             decomposition[:] = orig_decomp
             decomposition[iwave != kcl] = 0
-            rec = transform.reconstruct2d(cwt)  # (nx, ny)
+            rec = transform.reconstruct2d(cwt)
             rec_xy = rec.T
             rec_xy = rec_xy - np.nanmedian(rec_xy)
             rec_core = crop_pad_core(rec_xy)
@@ -1044,10 +1069,9 @@ def run_pipeline_for_slice(
             )
         )
 
-    # combined recon of all clusters
     decomposition[:] = orig_decomp
     decomposition[iwave < 0] = 0
-    rec_all = transform.reconstruct2d(cwt)  # (nx, ny)
+    rec_all = transform.reconstruct2d(cwt)
     rec_all_xy = rec_all.T - np.median(rec_all)
     decomposition[:] = orig_decomp
 
@@ -1071,7 +1095,8 @@ def run_pipeline_for_slice(
 
 def stitch_and_save_final_09(
     slice_results: List[Dict[str, Any]],
-    outroot: Path,
+    stitched_dir: Path,
+    filename_prefix: str,
     tag: str,
     product_type: str,
     params: Dict[str, Any],
@@ -1080,6 +1105,8 @@ def stitch_and_save_final_09(
         return
     if not slice_results:
         return
+
+    stitched_dir.mkdir(parents=True, exist_ok=True)
 
     SAVE_DPI = int(params["SAVE_DPI"])
     DX_KM_BASE = float(params["DX_KM_BASE"])
@@ -1124,12 +1151,8 @@ def stitch_and_save_final_09(
     cbar = figR.colorbar(imT, ax=[axT, axM, axB], orientation="vertical", fraction=0.012, pad=0.01)
     cbar.set_label("K (Relative)" if product_type == "l3a" else "kRayleigh (Relative)")
 
-    save_fig(
-        figR,
-        outroot / f"FINAL_09_remaining_vs_wavy_vs_allclusters_STITCHED_{tag}.png",
-        enable=True,
-        save_dpi=SAVE_DPI,
-    )
+    out_png = stitched_dir / f"{filename_prefix}_FINAL_09_STITCHED_{tag}.png"
+    save_fig(figR, out_png, enable=True, save_dpi=SAVE_DPI)
 
     cleanup_memory()
 
@@ -1138,10 +1161,6 @@ def stitch_and_save_final_09(
 # Per file runner (worker)
 # --------------------------
 def run_one_file_worker(file_path_str: str, params: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Worker-safe wrapper: accepts strings + simple dicts.
-    Returns a status dict.
-    """
     file_path = Path(file_path_str)
 
     OUTPUT_ROOT = Path(params["OUTPUT_ROOT"])
@@ -1154,7 +1173,7 @@ def run_one_file_worker(file_path_str: str, params: Dict[str, Any]) -> Dict[str,
 
     APPLY_BINNING = bool(params["APPLY_BINNING"])
     BIN_FACTOR = int(params["BIN_FACTOR"])
-    Y_SLICE = params["Y_SLICE"]  # slice object stored directly
+    Y_SLICE = params["Y_SLICE"]
 
     try:
         product_type = detect_product_type(file_path)
@@ -1163,22 +1182,17 @@ def run_one_file_worker(file_path_str: str, params: Dict[str, Any]) -> Dict[str,
         print(f"\n=== [PID {os.getpid()}] File: {file_path.name} | product={product_type}", flush=True)
 
         rad2d = read_frame(file_path, FRAME_IDX, product_type=product_type)
+        ny_raw, nx_total = rad2d.shape
 
-        rad2d_trim, x0_trim, x1_trim = trim_all_nan_edge_columns(rad2d)
-        x_base_unbinned = int(x0_trim)
-
-        rad2d_flat = flatten_swath(rad2d_trim, target_ny=300)
-        nx_total = rad2d_flat.shape[1]
+        x_base_unbinned = 0
 
         x_offset_global = int(X_OFFSET)
-        x_offset = x_offset_global - x_base_unbinned
+        x_offset = x_offset_global
         if x_offset < 0:
             x_offset = 0
-
         if x_offset >= nx_total:
             raise ValueError(
-                f"X_OFFSET={x_offset_global} (global) maps to {x_offset} (trimmed local) "
-                f"but nx_total after trimming is {nx_total} in file {file_path.name}"
+                f"X_OFFSET={x_offset_global} maps to {x_offset} but nx_total is {nx_total} in file {file_path.name}"
             )
 
         for cfg in runs:
@@ -1190,10 +1204,10 @@ def run_one_file_worker(file_path_str: str, params: Dict[str, Any]) -> Dict[str,
             (outroot / "RUN_CONFIG.txt").write_text(
                 "\n".join([f"{k} = {v}" for k, v in cfg.items()])
                 + f"\nproduct_type = {product_type}\nfile = {file_path.name}\n"
-                + f"x_trim_kept = [{x0_trim}:{x1_trim}]\n"
                 + f"x_base_unbinned = {x_base_unbinned}\n"
                 + f"X_OFFSET_global = {x_offset_global}\n"
-                + f"X_OFFSET_trimmed_local = {x_offset}\n"
+                + f"X_OFFSET_local = {x_offset}\n"
+                + "note = per-slice trim on raw, then flatten per slice\n"
             )
 
             core_starts = list(range(x_offset, nx_total, X_CHUNK))
@@ -1201,7 +1215,10 @@ def run_one_file_worker(file_path_str: str, params: Dict[str, Any]) -> Dict[str,
             all_cluster_records: List[Dict[str, Any]] = []
 
             f = BIN_FACTOR if (APPLY_BINNING and BIN_FACTOR > 1) else 1
-            y_dim = int(rad2d_flat[Y_SLICE, :].shape[0] // f)
+
+            ny_used = int(rad2d[Y_SLICE, :].shape[0])
+            ny_flat = min(int(300), ny_used) if ny_used > 300 else ny_used
+            y_dim = int(ny_flat // f)
             x_dim = int(X_CHUNK // f)
 
             for slice_no, core_start in enumerate(core_starts):
@@ -1218,10 +1235,9 @@ def run_one_file_worker(file_path_str: str, params: Dict[str, Any]) -> Dict[str,
                 )
 
                 res = run_pipeline_for_slice(
-                    rad2d_flat=rad2d_flat,
+                    rad2d_raw=rad2d,
                     x_slice=x_slice,
                     outdir=outdir,
-                    x_start_unbinned=ext_start,
                     core_start_unbinned=core_start,
                     core_end_unbinned=core_end,
                     x_base_unbinned=x_base_unbinned,
@@ -1235,9 +1251,13 @@ def run_one_file_worker(file_path_str: str, params: Dict[str, Any]) -> Dict[str,
                 all_cluster_records.extend(res.get("cluster_records", []))
                 cleanup_memory()
 
+            stitched_dir = OUTPUT_ROOT / DEFAULT_STITCHED_FOLDERNAME
+            filename_prefix = f"{file_path.stem}_{run_name}_offset_{x_offset_global:04d}"
+            
             stitch_and_save_final_09(
                 stitch_results,
-                outroot,
+                stitched_dir=stitched_dir,
+                filename_prefix=filename_prefix,
                 tag=f"{run_name}_offset_{x_offset_global:04d}",
                 product_type=product_type,
                 params=params,
@@ -1267,7 +1287,7 @@ def run_one_file_worker(file_path_str: str, params: Dict[str, Any]) -> Dict[str,
 
 
 # --------------------------
-# Main (parallel batch)
+# Main
 # --------------------------
 def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser()
@@ -1295,15 +1315,12 @@ def main() -> None:
     if not files:
         raise FileNotFoundError(f"No files matched {args.glob} in {input_folder.resolve()}")
 
-    # workers auto
     if args.workers and args.workers > 0:
         n_workers = int(args.workers)
     else:
-        # leave 1 core free if possible
         cpu = os.cpu_count() or 1
         n_workers = max(1, cpu - 1)
 
-    # pack runtime params into a picklable dict
     params: Dict[str, Any] = dict(
         INPUT_FOLDER=str(input_folder),
         FILE_GLOB=args.glob,
@@ -1355,7 +1372,6 @@ def main() -> None:
     ok = 0
     fail = 0
 
-    # parallel per file
     with ProcessPoolExecutor(max_workers=n_workers) as ex:
         futs = {ex.submit(run_one_file_worker, str(fp), params): fp for fp in files}
 

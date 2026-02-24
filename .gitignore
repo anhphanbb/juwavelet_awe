@@ -10,6 +10,7 @@ examples/CWT Whole Orbit/outputs_decompose2d_slices_single_noise_filtering_AUTO_
 examples/CWT Whole Orbit/outputs_L7A_MF_cartopy
 examples/CWT Whole Orbit/outputs_L7A_MF_cartopy_andes
 examples/CWT Whole Orbit/outputs_L7A_MF_cartopy_old
+Momentum Flux/Ignore
 build
 dist
 juwavelet.egg-info
