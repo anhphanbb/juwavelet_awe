@@ -11,11 +11,13 @@ examples/CWT Whole Orbit/outputs_L7A_MF_cartopy
 examples/CWT Whole Orbit/outputs_L7A_MF_cartopy_andes
 examples/CWT Whole Orbit/outputs_L7A_MF_cartopy_old
 Momentum Flux/Ignore
+Momentum Flux/l6
+Momentum Flux/outputs_decompose2d_slices
 build
 dist
 juwavelet.egg-info
 __pycache__
 .coverage
 report.xml
-Bear Lake Phase Speed Comparison Notebooks/
+Bear Lake Phase Speed Comparison Notebooks/Results
 Mountain Wave Phase Speed/

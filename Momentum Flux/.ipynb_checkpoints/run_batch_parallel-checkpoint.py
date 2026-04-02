@@ -5,7 +5,7 @@ from __future__ import annotations
 Parallel batch runner (per file parallelism).
 
 Example:
-  python run_batch_parallel.py --input l3 --glob "*.nc" --workers 4
+  python run_batch_parallel.py --year 2024 --month 01 --workers 4
 
 Notes:
 - Parallelizes across files (recommended). Slices remain sequential inside a file.
@@ -47,12 +47,9 @@ except Exception:
 # ==========================
 # DEFAULT PARAMS
 # ==========================
-DEFAULT_INPUT_FOLDER = Path("l3_Dominique")
 DEFAULT_FILE_GLOB = "*.nc"
 
-DEFAULT_OUTPUT_ROOT = Path("outputs_decompose2d_slices_single_noise_filtering_AUTO_BATCH")
 DEFAULT_SAVE_DPI = 200
-DEFAULT_OUTPUT_L6_FOLDER = Path("l6")
 DEFAULT_STITCHED_FOLDERNAME = "_STITCHED"   # inside OUTPUT_ROOT
 
 DEFAULT_FRAME_IDX = 0
@@ -562,7 +559,7 @@ def quicklook_background_decomp_4panel_save(
         ax.set_ylabel("y (km)")
         ax.set_aspect("equal", adjustable="box")
 
-    for ax in axs[len(panels) :]:
+    for ax in axs[len(panels):]:
         ax.axis("off")
 
     cbar = fig.colorbar(im0, ax=axs[: len(panels)], orientation="vertical", fraction=0.04, pad=0.02)
@@ -1253,7 +1250,7 @@ def run_one_file_worker(file_path_str: str, params: Dict[str, Any]) -> Dict[str,
 
             stitched_dir = OUTPUT_ROOT / DEFAULT_STITCHED_FOLDERNAME
             filename_prefix = f"{file_path.stem}_{run_name}_offset_{x_offset_global:04d}"
-            
+
             stitch_and_save_final_09(
                 stitch_results,
                 stitched_dir=stitched_dir,
@@ -1291,29 +1288,43 @@ def run_one_file_worker(file_path_str: str, params: Dict[str, Any]) -> Dict[str,
 # --------------------------
 def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--input", type=str, default=str(DEFAULT_INPUT_FOLDER), help="Input folder (e.g. l3)")
-    ap.add_argument("--glob", type=str, default=DEFAULT_FILE_GLOB, help='Glob pattern (e.g. "*.nc")')
-    ap.add_argument("--output-root", type=str, default=str(DEFAULT_OUTPUT_ROOT), help="Plot output root folder")
-    ap.add_argument("--output-l6", type=str, default=str(DEFAULT_OUTPUT_L6_FOLDER), help="Output L6 folder")
+
+    ap.add_argument("--year", type=str, required=True, help="Year, e.g. 2024")
+    ap.add_argument("--month", type=str, required=True, help="Month, e.g. 01")
+
     ap.add_argument("--workers", type=int, default=0, help="Number of worker processes (0 = auto)")
     ap.add_argument("--frame-idx", type=int, default=DEFAULT_FRAME_IDX)
     ap.add_argument("--x-offset", type=int, default=DEFAULT_X_OFFSET)
+
     ap.add_argument("--save-slice-plots", action="store_true", default=DEFAULT_SAVE_SLICE_PLOTS)
     ap.add_argument("--save-stitched-plot", action="store_true", default=DEFAULT_SAVE_STITCHED_PLOT)
     ap.add_argument("--save-rednoise-diagnostics", action="store_true", default=DEFAULT_SAVE_REDNOISE_DIAGNOSTICS)
+
     return ap.parse_args()
 
 
 def main() -> None:
     args = parse_args()
 
-    input_folder = Path(args.input)
-    output_root = Path(args.output_root)
-    output_l6 = Path(args.output_l6)
+    year = str(args.year)
+    month = str(args.month).zfill(2)
 
-    files = sorted(input_folder.glob(args.glob))
+    input_l3a = Path(f"Z:/socfiles/l3a/{year}/{month}/2x2")
+    input_l3c = Path(f"Z:/socfiles/l3c/{year}/{month}")
+
+    output_root = Path(f"outputs_decompose2d_slices/{year}/{month}")
+    output_l6 = Path(f"l6/{year}/{month}")
+
+    files_l3a = sorted(input_l3a.glob(DEFAULT_FILE_GLOB))
+    files_l3c = sorted(input_l3c.glob(DEFAULT_FILE_GLOB))
+    files = files_l3a + files_l3c
+
     if not files:
-        raise FileNotFoundError(f"No files matched {args.glob} in {input_folder.resolve()}")
+        raise FileNotFoundError(
+            f"No files matched {DEFAULT_FILE_GLOB} in either:\n"
+            f"  {input_l3a.resolve()}\n"
+            f"  {input_l3c.resolve()}"
+        )
 
     if args.workers and args.workers > 0:
         n_workers = int(args.workers)
@@ -1322,8 +1333,10 @@ def main() -> None:
         n_workers = max(1, cpu - 1)
 
     params: Dict[str, Any] = dict(
-        INPUT_FOLDER=str(input_folder),
-        FILE_GLOB=args.glob,
+        YEAR=year,
+        MONTH=month,
+        INPUT_L3A=str(input_l3a),
+        INPUT_L3C=str(input_l3c),
         OUTPUT_ROOT=str(output_root),
         OUTPUT_L6_FOLDER=str(output_l6),
         SAVE_DPI=DEFAULT_SAVE_DPI,
@@ -1360,7 +1373,10 @@ def main() -> None:
     output_root.mkdir(parents=True, exist_ok=True)
     output_l6.mkdir(parents=True, exist_ok=True)
 
-    print(f"Found {len(files)} files in {input_folder.resolve()}")
+    print(f"Year/month: {year}/{month}")
+    print(f"Found {len(files)} files total")
+    print(f"  L3A folder: {input_l3a}")
+    print(f"  L3C folder: {input_l3c}")
     print(f"Workers: {n_workers}")
     print(f"L6 output folder: {output_l6.resolve()}")
     print(f"Plot output root: {output_root.resolve()}")
