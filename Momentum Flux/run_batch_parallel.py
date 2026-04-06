@@ -7,6 +7,10 @@ Parallel batch runner (per file parallelism).
 Example:
   python run_batch_parallel.py --year 2024 --month 01 --workers 4
 
+  for %m in (03 04 07 08) do (
+    python run_batch_parallel.py --year 2024 --month %m
+)
+
 Notes:
 - Parallelizes across files (recommended). Slices remain sequential inside a file.
 - Uses matplotlib Agg backend so no GUI windows.

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-run_batch_MF.py
+run_batch_parallel_MF.py
 
 BATCH: ALL SLICES matching + per slice combined L6A recon + FULL ORBIT stitched recon
 + slice Temperature + momentum flux for PASSED clusters only
@@ -18,6 +18,11 @@ Extra filter (L6A only, per slice):
 
 Example:
   python run_batch_MF.py --l6 l6 --l7 l7 --out outputs_BATCH --nproc 6
+
+for m in 04 07 08
+do
+  python run_batch_parallel_MF.py --l6 l6/2024/$m --l7 l7/2024/$m
+done
 """
 
 from __future__ import annotations
@@ -42,9 +47,9 @@ from netCDF4 import Dataset
 # ============================================================
 # Defaults (can be overridden by CLI)
 # ============================================================
-DEFAULT_L6_DIR = Path("l6")
-DEFAULT_L7_DIR = Path("l7")
-DEFAULT_OUTROOT = Path("outputs_BATCH_l6a_to_l6c_matching_ratio_STITCH_MF")
+DEFAULT_L6_DIR = Path("l6/2024/03")
+DEFAULT_L7_DIR = Path("l7/2024/03")
+DEFAULT_OUTROOT = Path("outputs_matching")
 
 SAVE_DPI = 200
 DX_KM = 2.0

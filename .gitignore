@@ -12,7 +12,10 @@ examples/CWT Whole Orbit/outputs_L7A_MF_cartopy_andes
 examples/CWT Whole Orbit/outputs_L7A_MF_cartopy_old
 Momentum Flux/Ignore
 Momentum Flux/l6
+Momentum Flux/l7
 Momentum Flux/outputs_decompose2d_slices
+Momentum Flux/outputs_matching
+Momentum Flux/outputs_MF_cartopy
 build
 dist
 juwavelet.egg-info
