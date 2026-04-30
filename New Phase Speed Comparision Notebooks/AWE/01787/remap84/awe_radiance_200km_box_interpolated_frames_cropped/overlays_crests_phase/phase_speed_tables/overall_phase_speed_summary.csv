@@ -1,0 +1,2 @@
+roi,best_a_deg_per_frame,avg_wavelength_km,avg_wavelength_error_km,avg_angle_deg,avg_angle_error_deg,direction,phase_slope_deg_per_point,phase_speed_m_per_s,phase_speed_error_m_per_s,SSE_min
+ROI_56,0.7208333333333332,22.106096732643948,4.017209073974502,77.6267408446281,8.07278753040274,-1,43.44642857142856,-40.23942271409304,7.312470220934224,0.09844571106072873

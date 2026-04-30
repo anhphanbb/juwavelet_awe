@@ -1,0 +1,4 @@
+   roi  window_index  start_row  end_row  start_frame  end_frame  best_a_deg_per_frame  avg_wavelength_km  avg_wavelength_error_km  avg_angle_deg  avg_angle_error_deg  direction  phase_speed_m_per_s  phase_speed_error_m_per_s  SSE_min
+ROI_56             0          0       29          0.0       29.0              0.327083          22.073760                 4.028482      77.565786             8.113339         -1           -18.232220                   3.327397 0.020161
+ROI_56             1          5       34          5.0       34.0              0.402083          22.066738                 4.023006      77.600456             8.099957         -1           -22.405726                   4.084807 0.014821
+ROI_56             2         10       39         10.0       39.0              0.514583          22.061954                 4.007060      77.660862             8.062326         -1           -28.668470                   5.206985 0.031479
