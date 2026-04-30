@@ -44,8 +44,8 @@ from netCDF4 import Dataset
 # ============================================================
 # Defaults (can be overridden by CLI)
 # ============================================================
-DEFAULT_L6_DIR = Path("l6/2024/03")
-DEFAULT_L7_DIR = Path("l7/2024/03")
+DEFAULT_L6_DIR = Path("l6/2024/03_v23")
+DEFAULT_L7_DIR = Path("l7/2024/03_v23")
 DEFAULT_OUTROOT = Path("outputs_matching")
 
 SAVE_DPI = 200

@@ -1,0 +1,2 @@
+      ROI a_deg/frame lambda_km lambda_err angle_deg angle_err  dir  c_m/s c_err  SSE
+ROI_fixed        0.42     25.27       3.54     91.36      6.39   -1 -26.86  3.76 0.07

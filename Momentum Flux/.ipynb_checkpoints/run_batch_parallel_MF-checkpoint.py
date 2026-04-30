@@ -19,10 +19,7 @@ Extra filter (L6A only, per slice):
 Example:
   python run_batch_MF.py --l6 l6 --l7 l7 --out outputs_BATCH --nproc 6
 
-for m in 04 07 08
-do
-  python run_batch_parallel_MF.py --l6 l6/2024/$m --l7 l7/2024/$m
-done
+for %m in (04 07 08) do python run_batch_parallel_MF.py --l6 l6/2024/%m --l7 l7/2024/%m --out outputs_matching/2024/%m
 """
 
 from __future__ import annotations
@@ -47,8 +44,8 @@ from netCDF4 import Dataset
 # ============================================================
 # Defaults (can be overridden by CLI)
 # ============================================================
-DEFAULT_L6_DIR = Path("l6/2024/03")
-DEFAULT_L7_DIR = Path("l7/2024/03")
+DEFAULT_L6_DIR = Path("l6/2024/03_v23")
+DEFAULT_L7_DIR = Path("l7/2024/03_v23")
 DEFAULT_OUTROOT = Path("outputs_matching")
 
 SAVE_DPI = 200
