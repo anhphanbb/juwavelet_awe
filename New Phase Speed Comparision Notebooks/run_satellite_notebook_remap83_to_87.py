@@ -42,7 +42,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 # Notebook template.
 # The script will try these names in order and use the first one it finds.
 NOTEBOOK_TEMPLATE_CANDIDATES = [
-    SCRIPT_DIR / "Satellite Based for 04714 v23 April 27 2026.ipynb",
+    SCRIPT_DIR / "Satellite Based for 09176 v23 April 27 2026.ipynb",
 ]
 
 # Remap range to process.
@@ -51,10 +51,10 @@ REMAP_END = 87
 
 # Input NetCDF pattern.
 # The {remap} part is replaced with 83, 84, ..., 87.
-NC_PATH_PATTERN = r"Z:\socfiles\l1a\remap_alt\awe_l1a_q20_2024265T0540_04714_v23_remap{remap}.nc"
+NC_PATH_PATTERN = r"Z:\socfiles\l1a\remap_alt\awe_l1a_q20_2025187T0512_09176_v23_remap{remap}.nc"
 
 # Output base folder.
-OUT_BASE = SCRIPT_DIR / "AWE" / "04714"
+OUT_BASE = SCRIPT_DIR / "AWE" / "09176"
 
 # Folder to store the temporary executed notebooks.
 EXECUTED_NOTEBOOK_DIR = OUT_BASE / "executed_notebooks"

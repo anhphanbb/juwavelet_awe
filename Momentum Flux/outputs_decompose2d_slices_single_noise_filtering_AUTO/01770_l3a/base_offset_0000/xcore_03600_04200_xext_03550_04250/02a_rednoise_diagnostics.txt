@@ -1,0 +1,14 @@
+Red noise filter diagnostics
+
+name                  = base
+WHITE_NOISE_THRESHOLD = 0.1
+WPS_NOISE_THRESHOLD   = 8.0
+
+n_coeff_total        = 22680000
+n_zero_after_white   = 4670436
+n_zero_after_scaled  = 22289027
+sMAD_WPS min         = 0.03956379743984077
+sMAD_WPS median      = 0.04643792357092216
+WPS_scaled min       = -0.9599815430900052
+WPS_scaled median    = 7.013238912130024e-17
+WPS_scaled max       = 42.65537912188291

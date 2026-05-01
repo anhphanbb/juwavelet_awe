@@ -74,8 +74,8 @@ MAX_ANGLE_DIFF_DEG = 15.0
 ASSIGN_BEST_EVEN_IF_FAILS = True
 
 # Plot saving switches (batch friendly)
-SAVE_PAIR_PLOTS = False          # side by side A vs C match PNGs per slice (heavy)
-SAVE_PER_CLUSTER_PANELS = False  # big panels per passed cluster (heavy)
+SAVE_PAIR_PLOTS = True          # side by side A vs C match PNGs per slice (heavy)
+SAVE_PER_CLUSTER_PANELS = True  # big panels per passed cluster (heavy)
 SAVE_STITCHED_PLOTS = True       # MF_stitched.png + MF_stitched_components.png
 
 # If True, save stitched PNGs into one shared folder (under outroot) instead of per pair folder
