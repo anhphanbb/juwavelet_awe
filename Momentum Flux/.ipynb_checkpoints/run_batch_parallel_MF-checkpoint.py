@@ -78,6 +78,10 @@ SAVE_PAIR_PLOTS = True          # side by side A vs C match PNGs per slice (heav
 SAVE_PER_CLUSTER_PANELS = True  # big panels per passed cluster (heavy)
 SAVE_STITCHED_PLOTS = True       # MF_stitched.png + MF_stitched_components.png
 
+# Debug option: save each L6A and L6C cluster individually before matching.
+# This does not change matching, filtering, MF calculation, or output NetCDF.
+SAVE_PREMATCH_CLUSTER_PLOTS = True
+
 # If True, save stitched PNGs into one shared folder (under outroot) instead of per pair folder
 SAVE_STITCHED_TO_COMMON_DIR = True
 COMMON_STITCHED_SUBDIRNAME = "_stitched_pngs"
@@ -437,6 +441,64 @@ def plot_side_by_side_4rows(
             axs[r, c].set_xlabel("x (km)")
 
     save_fig(fig, outpath)
+
+
+def plot_each_cluster_before_matching(
+    data: Dict[str, Any],
+    idx_list: np.ndarray,
+    slice_no: int,
+    label: str,
+    outdir: Path,
+    dx_km: float = DX_KM,
+    dy_km: float = DY_KM,
+) -> None:
+    """
+    Debug plot only: save each cluster as its own PNG before matching.
+
+    This does not affect matching, filtering, MF calculation, or NetCDF output.
+    It only reads the Amplitude map already loaded by load_l6_for_matching().
+    """
+    outdir.mkdir(parents=True, exist_ok=True)
+    idx_list = np.asarray(idx_list, dtype=int)
+
+    if idx_list.size == 0:
+        return
+
+    for cluster_idx in idx_list:
+        cluster_idx = int(cluster_idx)
+        with Dataset(data["path"], "r") as nc:
+            A = np.asarray(nc.variables["ClusterReconstruction"][cluster_idx], dtype=float)
+
+        ny, nx = A.shape
+        x1d_km = np.arange(nx, dtype=float) * dx_km
+        y1d_km = np.arange(ny, dtype=float) * dy_km
+
+        vmin, vmax = robust_limits(A, 2, 98)
+        n_pix = int(np.count_nonzero(np.isfinite(A)))
+
+        fig, ax = plt.subplots(figsize=(5.5, 4.5), constrained_layout=True)
+        im = ax.pcolormesh(
+            x1d_km,
+            y1d_km,
+            A,
+            shading="auto",
+            vmin=vmin,
+            vmax=vmax,
+        )
+
+        ax.set_title(f"{label} | slice {slice_no:03d} | cluster {cluster_idx:04d} | n={n_pix}")
+        ax.set_xlabel("x km")
+        ax.set_ylabel("y km")
+        ax.set_aspect("equal", adjustable="box")
+
+        cbar = fig.colorbar(im, ax=ax, fraction=0.04, pad=0.02)
+        cbar.set_label("Amplitude")
+
+        save_fig(
+            fig,
+            outdir / f"slice_{slice_no:03d}_{label}_cluster_{cluster_idx:04d}_before_matching.png",
+        )
+
 
 
 # ============================================================
@@ -900,6 +962,28 @@ def run_one_pair(
         pairs_dir = slice_dir / "pairs"
         pairs_dir.mkdir(parents=True, exist_ok=True)
 
+        # Optional debug plots BEFORE matching/filtering.
+        # Saves each L6A and L6C cluster individually so you can inspect them by eye.
+        # This does not change the pipeline.
+        if SAVE_PREMATCH_CLUSTER_PLOTS:
+            prematch_dir = slice_dir / "prematch_clusters"
+
+            plot_each_cluster_before_matching(
+                data=l6a,
+                idx_list=idx_a_raw,
+                slice_no=int(slice_no),
+                label="L6A",
+                outdir=prematch_dir / "L6A",
+            )
+
+            plot_each_cluster_before_matching(
+                data=l6c,
+                idx_list=idx_c,
+                slice_no=int(slice_no),
+                label="L6C",
+                outdir=prematch_dir / "L6C",
+            )
+
         # Apply L6A bad cluster filter per slice (optional)
         if FILTER_L6A_BAD_CLUSTERS and idx_a_raw.size > 0:
             idx_a, stats_by_idx, removed = filter_l6a_clusters_and_overlaps_in_slice(
@@ -1176,6 +1260,11 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--chunksize", type=int, default=1, help="Multiprocessing chunksize (usually keep 1 for big tasks).")
     p.add_argument("--no-stitch-plots", action="store_true", help="Disable stitched MF plots (faster).")
     p.add_argument("--no-l6a-filter", action="store_true", help="Disable L6A bad cluster + overlap filtering.")
+    p.add_argument(
+        "--save-prematch-cluster-plots",
+        action="store_true",
+        help="Debug only: save each L6A/L6C cluster individually before matching.",
+    )
     return p.parse_args()
 
 
@@ -1189,6 +1278,10 @@ def main() -> int:
     global FILTER_L6A_BAD_CLUSTERS
     if args.no_l6a_filter:
         FILTER_L6A_BAD_CLUSTERS = False
+
+    global SAVE_PREMATCH_CLUSTER_PLOTS
+    if args.save_prematch_cluster_plots:
+        SAVE_PREMATCH_CLUSTER_PLOTS = True
 
     l6_dir = Path(args.l6)
     l7_dir = Path(args.l7)
@@ -1229,6 +1322,7 @@ def main() -> int:
 
     print(f"Running with nproc={args.nproc}  chunksize={args.chunksize}")
     print(f"L6A filter enabled: {FILTER_L6A_BAD_CLUSTERS}")
+    print(f"Pre-match individual cluster plots enabled: {SAVE_PREMATCH_CLUSTER_PLOTS}")
     print(f"Stitched PNG folder: {stitched_png_dir.resolve()}")
 
     with mp.Pool(processes=args.nproc, initializer=_worker_init) as pool:

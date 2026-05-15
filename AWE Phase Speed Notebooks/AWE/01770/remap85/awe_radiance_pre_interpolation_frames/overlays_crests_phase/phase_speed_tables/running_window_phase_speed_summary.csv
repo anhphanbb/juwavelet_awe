@@ -1,0 +1,2 @@
+roi,window_index,start_row,end_row,start_frame,end_frame,best_a_deg_per_frame,avg_wavelength_km,avg_wavelength_error_km,avg_angle_deg,avg_angle_error_deg,direction,phase_slope_deg_per_point,phase_speed_m_per_s,phase_speed_error_m_per_s,SSE_min
+ROI_22,0,0,29,0.0,29.0,0.4270833333333333,31.821671331150966,10.55626381374603,99.40545838246905,10.755727880227163,-1,37.46428571428574,-34.319458243297284,11.384859437173485,45.143585047155156

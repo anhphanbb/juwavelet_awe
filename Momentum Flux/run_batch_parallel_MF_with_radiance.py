@@ -3,7 +3,7 @@
 run_batch_parallel_MF.py
 
 BATCH: ALL SLICES matching + per slice combined L6A recon + FULL ORBIT stitched recon
-+ slice Temperature + momentum flux for PASSED clusters only
++ slice Temperature + matched L6C radiance + momentum flux for PASSED clusters only
 + sum MF per slice + stitch MF across orbit
 + output NetCDF contains original L6A global attrs + variables, but ONLY PASSED clusters
   are kept for cluster dimension variables.
@@ -87,7 +87,7 @@ SAVE_STITCHED_TO_COMMON_DIR = True
 COMMON_STITCHED_SUBDIRNAME = "_stitched_pngs"
 
 # L6A cluster filter settings
-FILTER_L6A_BAD_CLUSTERS = True
+FILTER_L6A_BAD_CLUSTERS = False
 BAD_LAM_MED_KM_LT = 45.0
 BAD_AMP_MAX_K_GT = 4.0
 BAD_ANGLE_DEG_BETWEEN = (80.0, 100.0)  # inclusive, on 0..180 symmetry median
@@ -557,8 +557,10 @@ def flatten_swath(Z: np.ndarray, target_ny: int | None = None) -> np.ndarray:
 # ============================================================
 def create_passed_only_l6a_with_new_vars(
     src_l6a: Path,
+    src_l6c: Path,
     dst_l7a: Path,
     passed_cluster_indices: np.ndarray,
+    passed_match_pairs: List[Tuple[int, int]],
     time_index: int,
 ) -> Tuple[str, str, str]:
     passed_cluster_indices = np.asarray(passed_cluster_indices, dtype=int)
@@ -693,6 +695,27 @@ def create_passed_only_l6a_with_new_vars(
             slice_passed = np.asarray(dst.variables["SlicesNo"][:], dtype=int)
             ang_rad_passed = np.asarray(dst.variables["Angle"][:], dtype=float)
 
+            # Matched L6C radiance/reconstruction for each passed L6A cluster.
+            # This keeps the original matching pipeline the same. We just carry
+            # the matched L6C cluster into the L7 output.
+            a_to_c = {int(a): int(c) for a, c in passed_match_pairs}
+            rad_cluster = np.full((n_passed, y_tile, x_tile), np.nan, dtype=np.float32)
+
+            with Dataset(src_l6c, "r") as nc_c:
+                if "ClusterReconstruction" in nc_c.variables:
+                    rad_var = nc_c.variables["ClusterReconstruction"]
+
+                    for jj, a_idx in enumerate(passed_cluster_indices):
+                        c_idx = a_to_c.get(int(a_idx), None)
+                        if c_idx is None:
+                            continue
+
+                        R = np.asarray(rad_var[c_idx], dtype=float)
+                        mask = np.isfinite(amp_passed[jj])
+                        rad_cluster[jj][mask] = R[mask]
+                else:
+                    print(f"WARNING: ClusterReconstruction not found in {src_l6c}; Rad_cluster/Rad_slice will be NaN")
+
             for j in range(n_passed):
                 s = int(slice_passed[j])
                 x0 = s * x_tile
@@ -752,6 +775,7 @@ def create_passed_only_l6a_with_new_vars(
             _write("v_cluster", v_cluster, (cluster_dim, ytile_dim, xtile_dim), "v wind, cluster masked", "m/s")
             _write("NSquared_cluster", n2_cluster, (cluster_dim, ytile_dim, xtile_dim), "N^2, cluster masked", "s^-2")
             _write("Bearing_cluster", bearing_cluster, (cluster_dim, ytile_dim, xtile_dim), "Bearing (0=East, CCW), cluster masked", "degree")
+            _write("Rad_cluster", rad_cluster, (cluster_dim, ytile_dim, xtile_dim), "Matched L6C radiance/reconstruction, cluster masked", "arbitrary")
 
             _write("MF_cluster", mf_cluster, (cluster_dim, ytile_dim, xtile_dim), "MF proxy per pixel, cluster masked", "m2 s-2")
             _write("MFz_cluster", mfz_cluster, (cluster_dim, ytile_dim, xtile_dim), "MF cos^2(phi)", "m2 s-2")
@@ -771,6 +795,7 @@ def create_passed_only_l6a_with_new_vars(
             mf_slice = np.zeros((len(full_slices), y_tile, x_tile), dtype=np.float32)
             mfz_slice = np.zeros_like(mf_slice)
             mfm_slice = np.zeros_like(mf_slice)
+            rad_slice = np.full((len(full_slices), y_tile, x_tile), np.nan, dtype=np.float32)
 
             for k, s in enumerate(full_slices):
                 idx2 = np.where(slice_passed == s)[0]
@@ -779,9 +804,15 @@ def create_passed_only_l6a_with_new_vars(
                     mfz_slice[k] = np.nansum(mfz_cluster[idx2], axis=0)
                     mfm_slice[k] = np.nansum(mfm_cluster[idx2], axis=0)
 
+                    # Radiance/reconstruction from matched L6C clusters in this slice.
+                    # Use nanmean so overlapping matched radiance pixels are averaged.
+                    with np.errstate(invalid="ignore"):
+                        rad_slice[k] = np.nanmean(rad_cluster[idx2], axis=0)
+
             _write("MF_slice", mf_slice, ("slice", ytile_dim, xtile_dim), "Per slice MF sum (passed clusters), tile grid", "m2 s-2")
             _write("MFz_slice", mfz_slice, ("slice", ytile_dim, xtile_dim), "Per slice zonal MF sum (passed clusters), tile grid", "m2 s-2")
             _write("MFm_slice", mfm_slice, ("slice", ytile_dim, xtile_dim), "Per slice meridional MF sum (passed clusters), tile grid", "m2 s-2")
+            _write("Rad_slice", rad_slice, ("slice", ytile_dim, xtile_dim), "Per slice matched L6C radiance/reconstruction, mean of passed clusters", "arbitrary")
 
             # Stitch onto full x (top tile rows only)
             MF_top = np.full(temp_shape, np.nan, dtype=np.float32)
@@ -825,8 +856,8 @@ def create_passed_only_l6a_with_new_vars(
         del temp_raw_2d, u_raw_2d, v_raw_2d, n2_raw_2d
         del temp_full_2d, u_full_2d, v_full_2d, n2_full_2d
         del bearing_raw_2d, bearing_full_2d
-        del temp_cluster, u_cluster, v_cluster, n2_cluster, bearing_cluster
-        del mf_cluster, mfz_cluster, mfm_cluster
+        del temp_cluster, u_cluster, v_cluster, n2_cluster, bearing_cluster, rad_cluster
+        del mf_cluster, mfz_cluster, mfm_cluster, rad_slice
         gc.collect()
 
     return cluster_dim, ytile_dim, xtile_dim
@@ -953,6 +984,7 @@ def run_one_pair(
     summary_lines.append("slice  nA_raw  nA_kept  nC  nBestSaved  nPassed  note\n")
 
     passed_global_indices: List[int] = []
+    passed_match_pairs: List[Tuple[int, int]] = []  # (L6A cluster idx, matched L6C cluster idx)
 
     for slice_no in all_slices_a:
         idx_a_raw = np.where(l6a["SlicesNo"] == int(slice_no))[0]
@@ -1113,6 +1145,10 @@ def run_one_pair(
         passed_here = [int(m["cluster_a"]) for m in best_rows if bool(m["passes"])]
         passed_global_indices.extend(passed_here)
 
+        for m in best_rows:
+            if bool(m["passes"]):
+                passed_match_pairs.append((int(m["cluster_a"]), int(m["cluster_c"])))
+
         summary_lines.append(
             f"{slice_no:5d}  {idx_a_raw.size:6d}  {idx_a.size:7d}  {idx_c.size:2d}  {len(best_rows):10d}  {len(passed_here):7d}  ok\n"
         )
@@ -1125,6 +1161,13 @@ def run_one_pair(
 
     passed_global_indices = sorted(set(passed_global_indices))
     passed_idx = np.asarray(passed_global_indices, dtype=int)
+
+    # Keep one matched L6C index for each passed L6A cluster, ordered like passed_idx.
+    # This mirrors the passed-only L6A subset written to the output file.
+    pair_lookup: Dict[int, int] = {}
+    for a_idx, c_idx in passed_match_pairs:
+        pair_lookup[int(a_idx)] = int(c_idx)
+    passed_match_pairs = [(int(a_idx), int(pair_lookup[int(a_idx)])) for a_idx in passed_idx if int(a_idx) in pair_lookup]
 
     if passed_idx.size == 0:
         return dict(
@@ -1140,8 +1183,10 @@ def run_one_pair(
 
     create_passed_only_l6a_with_new_vars(
         src_l6a=l6a_path,
+        src_l6c=l6c_path,
         dst_l7a=out_l7a,
         passed_cluster_indices=passed_idx,
+        passed_match_pairs=passed_match_pairs,
         time_index=TIME_INDEX,
     )
 

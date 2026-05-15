@@ -30,6 +30,7 @@ import argparse
 import os
 import traceback
 import gc
+import csv
 
 import numpy as np
 
@@ -74,20 +75,20 @@ MAX_ANGLE_DIFF_DEG = 15.0
 ASSIGN_BEST_EVEN_IF_FAILS = True
 
 # Plot saving switches (batch friendly)
-SAVE_PAIR_PLOTS = True          # side by side A vs C match PNGs per slice (heavy)
-SAVE_PER_CLUSTER_PANELS = True  # big panels per passed cluster (heavy)
+SAVE_PAIR_PLOTS = False          # side by side A vs C match PNGs per slice (heavy)
+SAVE_PER_CLUSTER_PANELS = False  # big panels per passed cluster (heavy)
 SAVE_STITCHED_PLOTS = True       # MF_stitched.png + MF_stitched_components.png
 
 # Debug option: save each L6A and L6C cluster individually before matching.
 # This does not change matching, filtering, MF calculation, or output NetCDF.
-SAVE_PREMATCH_CLUSTER_PLOTS = True
+SAVE_PREMATCH_CLUSTER_PLOTS = False
 
 # If True, save stitched PNGs into one shared folder (under outroot) instead of per pair folder
 SAVE_STITCHED_TO_COMMON_DIR = True
 COMMON_STITCHED_SUBDIRNAME = "_stitched_pngs"
 
 # L6A cluster filter settings
-FILTER_L6A_BAD_CLUSTERS = True
+FILTER_L6A_BAD_CLUSTERS = False
 BAD_LAM_MED_KM_LT = 45.0
 BAD_AMP_MAX_K_GT = 4.0
 BAD_ANGLE_DEG_BETWEEN = (80.0, 100.0)  # inclusive, on 0..180 symmetry median
@@ -693,12 +694,49 @@ def create_passed_only_l6a_with_new_vars(
             slice_passed = np.asarray(dst.variables["SlicesNo"][:], dtype=int)
             ang_rad_passed = np.asarray(dst.variables["Angle"][:], dtype=float)
 
+            # ------------------------------------------------------------
+            # Per-cluster scalar summaries at the maximum-amplitude point
+            # ------------------------------------------------------------
+            # These are one value per PASSED cluster.
+            # The peak location is found in the cluster tile using Amplitude.
+            # Latitude/Longitude are taken from the flattened, slice-aligned
+            # Lat_top/Lon_top grid using global_x = slice_no * x_tile + x_index.
+            passed_l6a_cluster_index = passed_cluster_indices.astype(np.int32)
+            peak_lat = np.full(n_passed, np.nan, dtype=np.float32)
+            peak_lon = np.full(n_passed, np.nan, dtype=np.float32)
+            peak_amp = np.full(n_passed, np.nan, dtype=np.float32)
+            peak_lambda = np.full(n_passed, np.nan, dtype=np.float32)
+            peak_angle_rad = np.full(n_passed, np.nan, dtype=np.float32)
+            peak_angle_deg = np.full(n_passed, np.nan, dtype=np.float32)
+            peak_y_index = np.full(n_passed, -1, dtype=np.int32)
+            peak_x_index = np.full(n_passed, -1, dtype=np.int32)
+            peak_global_x_index = np.full(n_passed, -1, dtype=np.int32)
+
             for j in range(n_passed):
                 s = int(slice_passed[j])
                 x0 = s * x_tile
                 x1 = x0 + x_tile
 
                 mask = np.isfinite(amp_passed[j])
+
+                # Save one representative point per cluster: the pixel with max amplitude.
+                # This gives lat/lon, dominant wavelength, and dominant angle for that point.
+                A_peak_src = amp_passed[j]
+                if np.any(np.isfinite(A_peak_src)):
+                    yy, xx = np.unravel_index(np.nanargmax(A_peak_src), A_peak_src.shape)
+                    global_x = x0 + int(xx)
+
+                    peak_y_index[j] = int(yy)
+                    peak_x_index[j] = int(xx)
+                    peak_global_x_index[j] = int(global_x)
+                    peak_amp[j] = np.float32(A_peak_src[yy, xx])
+                    peak_lambda[j] = np.float32(lam_passed[j, yy, xx])
+                    peak_angle_rad[j] = np.float32(ang_rad_passed[j, yy, xx])
+                    peak_angle_deg[j] = np.float32(np.rad2deg(ang_rad_passed[j, yy, xx]) % 180.0)
+
+                    if yy < lat_full_2d.shape[0] and global_x < lat_full_2d.shape[1]:
+                        peak_lat[j] = np.float32(lat_full_2d[yy, global_x])
+                        peak_lon[j] = np.float32(lon_full_2d[yy, global_x])
 
                 # Tiles are now guaranteed to be (y_tile, x_tile) because of padding above
                 Ttile = temp_full_2d[:, x0:x1]
@@ -756,6 +794,26 @@ def create_passed_only_l6a_with_new_vars(
             _write("MF_cluster", mf_cluster, (cluster_dim, ytile_dim, xtile_dim), "MF proxy per pixel, cluster masked", "m2 s-2")
             _write("MFz_cluster", mfz_cluster, (cluster_dim, ytile_dim, xtile_dim), "MF cos^2(phi)", "m2 s-2")
             _write("MFm_cluster", mfm_cluster, (cluster_dim, ytile_dim, xtile_dim), "MF sin^2(phi)", "m2 s-2")
+
+            def _write_1d(name: str, arr: np.ndarray, long_name: str, units: str):
+                if name in dst.variables:
+                    dst.variables[name][:] = arr
+                else:
+                    v = dst.createVariable(name, arr.dtype, (cluster_dim,), zlib=True, complevel=4)
+                    v.setncattr("long_name", long_name)
+                    v.setncattr("units", units)
+                    v[:] = arr
+
+            _write_1d("Passed_L6A_cluster_index", passed_l6a_cluster_index, "Original L6A cluster index before passed-only subsetting", "1")
+            _write_1d("PeakAmplitude_Latitude", peak_lat, "Latitude of maximum amplitude point in cluster", "degree_north")
+            _write_1d("PeakAmplitude_Longitude", peak_lon, "Longitude of maximum amplitude point in cluster", "degree_east")
+            _write_1d("PeakAmplitude", peak_amp, "Maximum amplitude in cluster", "K")
+            _write_1d("PeakAmplitude_DominantWavelength", peak_lambda, "Dominant wavelength at maximum amplitude point", "km")
+            _write_1d("PeakAmplitude_DominantAngle_rad", peak_angle_rad, "Dominant angle at maximum amplitude point", "radian")
+            _write_1d("PeakAmplitude_DominantAngle_deg", peak_angle_deg, "Dominant angle at maximum amplitude point, 0 to 180 symmetry", "degree")
+            _write_1d("PeakAmplitude_y_index", peak_y_index, "Tile y index of maximum amplitude point", "pixel")
+            _write_1d("PeakAmplitude_x_index", peak_x_index, "Tile x index of maximum amplitude point", "pixel")
+            _write_1d("PeakAmplitude_global_x_index", peak_global_x_index, "Full-swath x index of maximum amplitude point", "pixel")
 
             # Slice sums on tile grid
             smin, smax = int(np.min(slice_passed)), int(np.max(slice_passed))
@@ -830,6 +888,61 @@ def create_passed_only_l6a_with_new_vars(
         gc.collect()
 
     return cluster_dim, ytile_dim, xtile_dim
+
+
+def export_peak_cluster_summary_csv(nc_path: Path, csv_path: Path) -> None:
+    """
+    Write a compact CSV with one row per passed cluster.
+
+    The NetCDF already stores these same values as 1D variables, but this CSV
+    is easier to inspect quickly in Excel/Python.
+    """
+    csv_path.parent.mkdir(parents=True, exist_ok=True)
+
+    with Dataset(nc_path, "r") as nc:
+        n = len(nc.dimensions[nc.variables["Amplitude"].dimensions[0]])
+
+        def read_1d(name: str, default=np.nan):
+            if name in nc.variables:
+                return np.asarray(nc.variables[name][:])
+            return np.full(n, default)
+
+        rows = []
+        for j in range(n):
+            rows.append({
+                "passed_cluster_number": int(j),
+                "original_l6a_cluster_index": int(read_1d("Passed_L6A_cluster_index", -1)[j]),
+                "slice_no": int(read_1d("SlicesNo", -1)[j]),
+                "peak_y_index": int(read_1d("PeakAmplitude_y_index", -1)[j]),
+                "peak_x_index": int(read_1d("PeakAmplitude_x_index", -1)[j]),
+                "peak_global_x_index": int(read_1d("PeakAmplitude_global_x_index", -1)[j]),
+                "peak_latitude_deg": float(read_1d("PeakAmplitude_Latitude")[j]),
+                "peak_longitude_deg": float(read_1d("PeakAmplitude_Longitude")[j]),
+                "peak_amplitude_K": float(read_1d("PeakAmplitude")[j]),
+                "dominant_wavelength_at_peak_km": float(read_1d("PeakAmplitude_DominantWavelength")[j]),
+                "dominant_angle_at_peak_deg": float(read_1d("PeakAmplitude_DominantAngle_deg")[j]),
+                "dominant_angle_at_peak_rad": float(read_1d("PeakAmplitude_DominantAngle_rad")[j]),
+            })
+
+    fieldnames = [
+        "passed_cluster_number",
+        "original_l6a_cluster_index",
+        "slice_no",
+        "peak_y_index",
+        "peak_x_index",
+        "peak_global_x_index",
+        "peak_latitude_deg",
+        "peak_longitude_deg",
+        "peak_amplitude_K",
+        "dominant_wavelength_at_peak_km",
+        "dominant_angle_at_peak_deg",
+        "dominant_angle_at_peak_rad",
+    ]
+
+    with open(csv_path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
 
 
 # ============================================================
@@ -1143,6 +1256,12 @@ def run_one_pair(
         dst_l7a=out_l7a,
         passed_cluster_indices=passed_idx,
         time_index=TIME_INDEX,
+    )
+
+    # Also save a compact CSV summary with one row per passed cluster.
+    export_peak_cluster_summary_csv(
+        nc_path=out_l7a,
+        csv_path=outdir / f"{out_l7a.stem}_peak_cluster_summary.csv",
     )
 
     # Decide where stitched PNGs go

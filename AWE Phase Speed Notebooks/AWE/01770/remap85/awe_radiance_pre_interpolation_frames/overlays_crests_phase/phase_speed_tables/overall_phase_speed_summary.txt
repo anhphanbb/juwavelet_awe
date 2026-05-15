@@ -1,0 +1,2 @@
+   ROI a_deg/frame lambda_km lambda_err angle_deg angle_err  dir  c_m/s c_err   SSE
+ROI_22        0.38     31.72      10.49     99.24     10.69   -1 -30.71 10.16 45.58
