@@ -45,8 +45,8 @@ from netCDF4 import Dataset
 # ============================================================
 # Defaults (can be overridden by CLI)
 # ============================================================
-DEFAULT_L6_DIR = Path("l6/2024/03_v23")
-DEFAULT_L7_DIR = Path("l7/2024/03_v23")
+DEFAULT_L6_DIR = Path("l6/2024")
+DEFAULT_L7_DIR = Path("l7/2024")
 DEFAULT_OUTROOT = Path("outputs_matching")
 
 SAVE_DPI = 200
@@ -961,20 +961,56 @@ def create_passed_only_l6a_with_new_vars(
             _write("MFm_top", MFm_top, temp_dims, "Stitched meridional MF share on top tile rows only", "m2 s-2")
 
             # Flattened toprows Temperature, Latitude, Longitude aligned with MF_top
-            T_top = np.full(temp_shape, np.nan, dtype=np.float32)
-            Lat_top = np.full(temp_shape, np.nan, dtype=np.float32)
-            Lon_top = np.full(temp_shape, np.nan, dtype=np.float32)
+#            T_top = np.full(temp_shape, np.nan, dtype=np.float32)
+#            Lat_top = np.full(temp_shape, np.nan, dtype=np.float32)
+#            Lon_top = np.full(temp_shape, np.nan, dtype=np.float32)
+
+#            nx_out = temp_shape[2]
+#            nx_copy = min(nx_out, temp_full_2d.shape[1])
+
+#            T_top[time_index, 0:y_tile, 0:nx_copy] = temp_full_2d[:, 0:nx_copy].astype(np.float32)
+#            Lat_top[time_index, 0:y_tile, 0:nx_copy] = lat_full_2d[:, 0:nx_copy].astype(np.float32)
+#            Lon_top[time_index, 0:y_tile, 0:nx_copy] = lon_full_2d[:, 0:nx_copy].astype(np.float32)
 
             nx_out = temp_shape[2]
-            nx_copy = min(nx_out, temp_full_2d.shape[1])
 
-            T_top[time_index, 0:y_tile, 0:nx_copy] = temp_full_2d[:, 0:nx_copy].astype(np.float32)
-            Lat_top[time_index, 0:y_tile, 0:nx_copy] = lat_full_2d[:, 0:nx_copy].astype(np.float32)
-            Lon_top[time_index, 0:y_tile, 0:nx_copy] = lon_full_2d[:, 0:nx_copy].astype(np.float32)
+            for s in full_slices:
+                x0 = int(s) * x_tile
+                x1 = x0 + x_tile
+            
+                x0c = max(0, min(x0, nx_out))
+                x1c = max(0, min(x1, nx_out))
+            
+                if x1c <= x0c:
+                    continue
+            
+                src_x0 = x0c
+                src_x1 = x1c
+            
+                if src_x1 > temp_full_2d.shape[1]:
+                    src_x1 = temp_full_2d.shape[1]
+            
+                w = src_x1 - src_x0
+                if w <= 0:
+                    continue
+            
+                T_top[time_index, 0:y_tile, x0c:x0c + w] = (
+                    temp_full_2d[:, src_x0:src_x1].astype(np.float32)
+                )
+            
+                Lat_top[time_index, 0:y_tile, x0c:x0c + w] = (
+                    lat_full_2d[:, src_x0:src_x1].astype(np.float32)
+                )
+            
+                Lon_top[time_index, 0:y_tile, x0c:x0c + w] = (
+                    lon_full_2d[:, src_x0:src_x1].astype(np.float32)
+                )
 
             _write("T_top", T_top, temp_dims, "Flattened Temperature on MF_top grid (top tile rows only)", "K")
             _write("Lat_top", Lat_top, temp_dims, "Flattened Latitude on MF_top grid (top tile rows only)", "degree_north")
             _write("Lon_top", Lon_top, temp_dims, "Flattened Longitude on MF_top grid (top tile rows only)", "degree_east")
+
+            
 
         del temp_raw_2d, u_raw_2d, v_raw_2d, n2_raw_2d
         del temp_full_2d, u_full_2d, v_full_2d, n2_full_2d

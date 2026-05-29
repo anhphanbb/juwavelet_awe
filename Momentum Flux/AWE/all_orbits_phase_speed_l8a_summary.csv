@@ -1,0 +1,5 @@
+file,orbit_tag,orbit_id,version,status,summary_csv,l8a_file,n_rows
+l7\2024\03_v23\awe_l7a_tmp_2024075T1017_01773_v23.nc,2024075T1017_01773,01773,v23,done,AWE\01773\remap85_from_l7a\selected_slices_clusters_phase_speed_summary.csv,l7\2024\03_v23\awe_l8a_tmp_2024075T1017_01773_v23.nc,8
+l7\2024\03_v23\awe_l7a_tmp_2024075T0711_01771_v23.nc,2024075T0711_01771,01771,v23,done,AWE\01771\remap85_from_l7a\selected_slices_clusters_phase_speed_summary.csv,l7\2024\03_v23\awe_l8a_tmp_2024075T0711_01771_v23.nc,33
+l7\2024\03_v23\awe_l7a_tmp_2024075T0844_01772_v23.nc,2024075T0844_01772,01772,v23,done,AWE\01772\remap85_from_l7a\selected_slices_clusters_phase_speed_summary.csv,l7\2024\03_v23\awe_l8a_tmp_2024075T0844_01772_v23.nc,34
+l7\2024\03_v23\awe_l7a_tmp_2024075T0538_01770_v23.nc,2024075T0538_01770,01770,v23,done,AWE\01770\remap85_from_l7a\selected_slices_clusters_phase_speed_summary.csv,l7\2024\03_v23\awe_l8a_tmp_2024075T0538_01770_v23.nc,35

@@ -163,7 +163,7 @@ def save_preinterp_frames_near_target(
     *,
     center_y: int = 150,
     center_x: int = 150,
-    n_frames_before_after: int = 15,
+    n_frames_before_after: int = 12,
     r_plot_km: float = 200.0,
     vmin: float = 3.0,
     vmax: float = 14.0,
@@ -301,8 +301,8 @@ def roi_label_to_slices(
     """
     ROI logic:
 
-    λ < 64 km  -> ROI = 100 x 100
-    λ ≥ 64 km  -> ROI = 150 x 150
+    λ < 64 km  -> ROI = 80 x 80
+    λ ≥ 64 km  -> ROI = 120 x 120
 
     ROI stays centered around (100, 100).
 
@@ -330,11 +330,11 @@ def roi_label_to_slices(
     # ROI size
     if roi_width is None or roi_height is None:
         if target_wavelength_km is not None and target_wavelength_km < 64:
-            roi_width = 100
-            roi_height = 100
+            roi_width = 80
+            roi_height = 80
         else:
-            roi_width = 150
-            roi_height = 150
+            roi_width = 120
+            roi_height = 120
 
     # Image center
     center_x = img_nx // 2
@@ -361,6 +361,237 @@ def roi_label_to_slices(
     roi_name = f"ROI_{label}_{roi_width}x{roi_height}"
 
     return roi_name, slice(x0, x1), slice(y0, y1)
+
+
+def choose_roi_label_from_peak(
+    peak_x: float,
+    peak_y: float,
+    *,
+    roi_width: int,
+    roi_height: int,
+    threshold_px: float = 25.0,
+) -> int:
+    """
+    Choose a 3x3 ROI label from the peak position found inside ROI 22.
+
+    The first digit controls x shift:
+        1 = left, 2 = center, 3 = right
+
+    The second digit controls y shift:
+        1 = up, 2 = center, 3 = down
+
+    Example:
+        peak is 30 px right of ROI center -> 32
+        peak is 35 px above ROI center    -> 21
+    """
+    center_x = roi_width / 2.0
+    center_y = roi_height / 2.0
+
+    dx = float(peak_x) - center_x
+    dy = float(peak_y) - center_y
+
+    a = 2
+    b = 2
+
+    if dx > threshold_px:
+        a = 3
+    elif dx < -threshold_px:
+        a = 1
+
+    # Image coordinates: smaller y is higher/up.
+    if dy > threshold_px:
+        b = 3
+    elif dy < -threshold_px:
+        b = 1
+
+    return int(f"{a}{b}")
+
+
+def _roi_size_for_wavelength(
+    target_wavelength_km: Optional[float],
+    *,
+    roi_width: Optional[int] = None,
+    roi_height: Optional[int] = None,
+) -> Tuple[int, int]:
+    """
+    Keep the ROI-size rule in one place so smart ROI and roi_label_to_slices agree.
+    """
+    if roi_width is not None and roi_height is not None:
+        return int(roi_width), int(roi_height)
+
+    if target_wavelength_km is not None and target_wavelength_km < 64:
+        return 80, 80
+    return 120, 120
+
+
+def find_peak_in_roi_for_file(
+    img_path: Path,
+    x_slice: slice,
+    y_slice: slice,
+    *,
+    target_wavelength_km: float,
+    target_angle_deg: float,
+    dx: float = 2.0,
+    dy: float = 2.0,
+    s0: Optional[float] = None,
+    dj: float = 1 / 8,
+    js: int = 6,
+    jt: int = 18,
+    aspect: float = 1.0,
+    bandpass_factor: float = 2.0,
+    angle_half_width_deg: float = 20.0,
+    cluster_min_amp: float = 0.25,
+    cluster_thr: float = 0.1,
+    standardize: bool = True,
+    gauss_blur_sigma: float = 0.0,
+    apply_taper: bool = True,
+    taper_edge_pixels: int = 6,
+) -> Tuple[Optional[int], Optional[int], float, float]:
+    """
+    Run the same preprocessing + wavelet filtering on one image/ROI and return
+    the strongest crest/peak position inside that ROI.
+
+    This is used only for smart ROI selection:
+        1. Try ROI 22 on the first frame.
+        2. Find peak position inside ROI 22.
+        3. Pick the better ROI label.
+    """
+    if s0 is None:
+        s0 = float(target_wavelength_km / (np.sqrt(2)))
+
+    full = load_image(img_path)
+    raw = full[y_slice, x_slice].astype(float)
+
+    plane = fit_plane(raw)
+    detrended = raw - plane
+    fourier_bg, _ = extract_first_fourier_bg(detrended)
+    background = plane + fourier_bg
+    remaining = raw - background
+    remaining = apply_edge_hanning_taper(remaining, taper_edge_pixels) if apply_taper else remaining
+
+    proc = remaining.copy()
+    if standardize:
+        proc = proc - np.median(proc)
+        s_proc = np.std(proc)
+        if s_proc > 0:
+            proc = proc / s_proc
+    proc = maybe_blur(proc, gauss_blur_sigma)
+
+    cwt = transform.decompose2d(proc.T, dx=dx, dy=dy, s0=s0, dj=dj, js=js, jt=jt, aspect=aspect)
+    decomposition = cwt["decomposition"]
+
+    lam_eff, theta_deg = compute_lambda_theta_fields(cwt)
+    mask_keep = (
+        np.isfinite(lam_eff)
+        & (lam_eff >= target_wavelength_km / bandpass_factor)
+        & (lam_eff <= target_wavelength_km * bandpass_factor)
+        & angle180_window_mask(theta_deg, target_angle_deg, angle_half_width_deg)
+    )
+    decomposition *= mask_keep[:, :, None, None].astype(decomposition.dtype)
+
+    amps, idxs, iwave = utils.identify_cluster2d(cwt, min_amp=cluster_min_amp, thr=cluster_thr)
+    n_clusters = len(amps) if amps is not None else 0
+    if n_clusters == 0:
+        return None, None, np.nan, np.nan
+
+    order = np.argsort(amps)[::-1]
+    kcl = int(order[0])
+    orig_decomp = decomposition.copy()
+    decomposition[:] = orig_decomp
+    decomposition[iwave != kcl] = 0
+
+    rec = transform.reconstruct2d(cwt)
+    rec_centered = rec.T - np.median(rec)
+
+    wavelength_km, wavelength_error_km, angle_deg, angle_error_deg, _ = compute_cluster_weighted_lambda_angle(cwt, iwave, kcl)
+
+    crests = find_top_crests(rec_centered, num=1, neighborhood=7, min_rel_amp=0.2)
+    if crests:
+        peak_y, peak_x, _ = crests[0]
+        return int(peak_x), int(peak_y), float(wavelength_km), float(angle_deg)
+
+    peak_y, peak_x = np.unravel_index(np.nanargmax(rec_centered), rec_centered.shape)
+    return int(peak_x), int(peak_y), float(wavelength_km), float(angle_deg)
+
+
+def choose_smart_roi_label_from_first_frame(
+    frame_dir: str | Path,
+    *,
+    target_wavelength_km: float,
+    target_angle_deg: float,
+    default_roi_label: int | str = "smart",
+    threshold_px: float = 25.0,
+    verbose: bool = True,
+) -> Tuple[int, Dict[str, Any]]:
+    """
+    Two-pass ROI selection.
+
+    First, use ROI 22 as the scouting ROI on the first saved frame.
+    Then use the detected peak location inside that ROI to choose the final ROI.
+    The full CSV/phase-speed analysis is then run only on the final ROI.
+    """
+    frame_dir = Path(frame_dir)
+    files = sorted(frame_dir.glob("*.png"))
+    if not files:
+        raise FileNotFoundError(f"No PNG image files found in {frame_dir}")
+
+    scout_roi_label = default_roi_label
+    scout_roi_name, scout_x_slice, scout_y_slice = roi_label_to_slices(
+        scout_roi_label,
+        target_wavelength_km=target_wavelength_km,
+    )
+
+    roi_width = scout_x_slice.stop - scout_x_slice.start
+    roi_height = scout_y_slice.stop - scout_y_slice.start
+
+    peak_x, peak_y, scout_lam, scout_angle = find_peak_in_roi_for_file(
+        files[0],
+        scout_x_slice,
+        scout_y_slice,
+        target_wavelength_km=target_wavelength_km,
+        target_angle_deg=target_angle_deg,
+    )
+
+    if peak_x is None or peak_y is None:
+        final_roi_label = int(scout_roi_label)
+        dx_from_center = np.nan
+        dy_from_center = np.nan
+    else:
+        dx_from_center = float(peak_x) - roi_width / 2.0
+        dy_from_center = float(peak_y) - roi_height / 2.0
+        final_roi_label = choose_roi_label_from_peak(
+            peak_x,
+            peak_y,
+            roi_width=roi_width,
+            roi_height=roi_height,
+            threshold_px=threshold_px,
+        )
+
+    info = {
+        "scout_roi_label": int(scout_roi_label),
+        "scout_roi_name": scout_roi_name,
+        "scout_frame": str(files[0]),
+        "scout_peak_x": peak_x,
+        "scout_peak_y": peak_y,
+        "scout_roi_width": roi_width,
+        "scout_roi_height": roi_height,
+        "scout_peak_dx_from_center_px": dx_from_center,
+        "scout_peak_dy_from_center_px": dy_from_center,
+        "scout_wavelength_km": scout_lam,
+        "scout_angle_deg": scout_angle,
+        "smart_roi_label": int(final_roi_label),
+        "smart_roi_threshold_px": float(threshold_px),
+    }
+
+    if verbose:
+        print("Smart ROI scouting:")
+        print(f"  scout ROI                  : {scout_roi_name}")
+        print(f"  first frame                 : {files[0].name}")
+        print(f"  peak in scout ROI           : x={peak_x}, y={peak_y}")
+        print(f"  offset from scout ROI center: dx={dx_from_center:.1f}, dy={dy_from_center:.1f} px")
+        print(f"  final ROI label             : {final_roi_label}")
+
+    return int(final_roi_label), info
 
 
 # -----------------------------------------------------------------------------
@@ -546,7 +777,7 @@ def run_pipeline_for_file(
     dy: float = 2.0,
     s0: Optional[float] = None,
     dj: float = 1 / 8,
-    js: int = 8,
+    js: int = 6,
     jt: int = 18,
     aspect: float = 1.0,
     bandpass_factor: float = 2.0,
@@ -556,8 +787,8 @@ def run_pipeline_for_file(
     standardize: bool = True,
     gauss_blur_sigma: float = 0.0,
     apply_taper: bool = True,
-    taper_edge_pixels: int = 10,
-    save_overlay: bool = False,
+    taper_edge_pixels: int = 6,
+    save_overlay: bool = True,
     crest_iy: Optional[np.ndarray] = None,
     crest_ix: Optional[np.ndarray] = None,
     init_crests_from_this_file: bool = False,
@@ -631,7 +862,11 @@ def run_pipeline_for_file(
         crests = find_top_crests(rec_centered, num=1, neighborhood=7, min_rel_amp=0.2)
         if crests:
             crest0_iy, crest0_ix, _ = crests[0]
-            theta_rad = np.deg2rad(angle_deg)
+            # The angle saved from compute_lambda_theta_fields() is flipped as 180 - theta.
+            # For choosing the 7 points, we want the actual propagation/normal direction.
+            sample_angle_deg = (180.0 - angle_deg) % 180.0
+            
+            theta_rad = np.deg2rad(sample_angle_deg)
             ux = np.cos(theta_rad)
             uy = np.sin(theta_rad)
             step_pix = max(radius_pix // 4, 1)
@@ -681,10 +916,25 @@ def build_roi_csv(
     target_wavelength_km: float,
     target_angle_deg: float,
     overlay_base_dir: Optional[str | Path] = None,
-    save_overlay: bool = False,
+    save_overlay: bool = True,
     force_rebuild: bool = True,
-) -> Path:
+    smart_roi_threshold_px: float = 25.0,
+    verbose: bool = True,
+) -> Tuple[Path, int, Dict[str, Any]]:
     frame_dir = Path(frame_dir)
+
+    smart_info: Dict[str, Any] = {}
+    roi_label_in = str(roi_label).strip().lower()
+    if roi_label_in in {"smart", "auto"}:
+        roi_label, smart_info = choose_smart_roi_label_from_first_frame(
+            frame_dir,
+            target_wavelength_km=target_wavelength_km,
+            target_angle_deg=target_angle_deg,
+            default_roi_label=22,
+            threshold_px=smart_roi_threshold_px,
+            verbose=verbose,
+        )
+
     roi_name, x_slice, y_slice = roi_label_to_slices(
         roi_label,
         target_wavelength_km=target_wavelength_km,
@@ -695,7 +945,7 @@ def build_roi_csv(
     csv_path = overlay_dir / "crest_relative_amplitude_evolution.csv"
 
     if csv_path.exists() and not force_rebuild:
-        return csv_path
+        return csv_path, int(roi_label), smart_info
 
     files = sorted(frame_dir.glob("*.png"))
     if not files:
@@ -753,7 +1003,7 @@ def build_roi_csv(
             writer.writerow(row)
 
     np.save(overlay_dir / "crest_relative_amplitude_evolution.npy", val_arr)
-    return csv_path
+    return csv_path, int(roi_label), smart_info
 
 
 # -----------------------------------------------------------------------------
@@ -1001,9 +1251,9 @@ def calculate_phase_speed_for_l7a_point(
     out_dir: str | Path,
     *,
     cluster_id: Optional[str | int] = None,
-    roi_label: int | str = 22,
+    roi_label: int | str = "smart",
     dt_frame_s: float = 1.1,
-    n_frames_before_after: int = 15,
+    n_frames_before_after: int = 12,
     r_plot_km: float = 200.0,
     force_rebuild_frames: bool = True,
     force_rebuild_csv: bool = True,
@@ -1029,7 +1279,10 @@ def calculate_phase_speed_for_l7a_point(
     cluster_id:
         Optional cluster label saved in the result summary.
     roi_label:
-        ROI label using your current ROI logic. Default is 22.
+        ROI label using your current ROI logic. Default is "smart".
+        "smart" first runs ROI 22 on the first frame, finds the peak,
+        then switches to 11/12/13/21/22/.../33 if the peak is more
+        than 25 px away from the ROI center.
 
     Returns
     -------
@@ -1061,18 +1314,19 @@ def calculate_phase_speed_for_l7a_point(
         force_rebuild=force_rebuild_frames,
     )
 
-    csv_path = build_roi_csv(
+    csv_path, final_roi_label, smart_roi_info = build_roi_csv(
         frame_dir=frame_dir,
         roi_label=roi_label,
         target_wavelength_km=target_wavelength_km,
         target_angle_deg=target_angle_deg,
         save_overlay=save_overlay,
         force_rebuild=force_rebuild_csv,
+        verbose=verbose,
     )
 
     fit = calculate_phase_speed_from_csv(csv_path, dt_frame_s=dt_frame_s)
 
-    roi_name = f"ROI_{roi_label}"
+    roi_name = f"ROI_{final_roi_label}"
     result = PhaseSpeedResult(
         roi=roi_name,
         target_lat=float(target_lat),
@@ -1086,6 +1340,9 @@ def calculate_phase_speed_for_l7a_point(
         csv_path=str(csv_path),
         **fit,
     ).to_dict()
+
+    if smart_roi_info:
+        result.update(smart_roi_info)
 
     if cluster_id is not None:
         result = {"cluster_id": cluster_id, **result}
@@ -1119,9 +1376,9 @@ def calculate_phase_speed_for_multiple_l7a_points(
     clusters: Sequence[Dict[str, Any]],
     base_out_dir: str | Path,
     *,
-    default_roi_label: int | str = 22,
+    default_roi_label: int | str = "smart",
     dt_frame_s: float = 1.1,
-    n_frames_before_after: int = 15,
+    n_frames_before_after: int = 12,
     r_plot_km: float = 200.0,
     force_rebuild_frames: bool = True,
     force_rebuild_csv: bool = True,
