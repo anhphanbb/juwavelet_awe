@@ -96,8 +96,8 @@ DEFAULT_QUIVER_SCALE = 1
 DEFAULT_APPLY_RED_NOISE_FILTER = True
 
 DEFAULT_SAVE_REDNOISE_DIAGNOSTICS = True #False
-DEFAULT_SAVE_SLICE_PLOTS = True #False
-DEFAULT_SAVE_STITCHED_PLOT = True
+DEFAULT_SAVE_SLICE_PLOTS = False #False
+DEFAULT_SAVE_STITCHED_PLOT = False    #True
 
 
 # --------------------------
@@ -1458,8 +1458,8 @@ def main() -> None:
     year = str(args.year)
     month = str(args.month).zfill(2)
 
-    input_l3a = Path(f"Z:/socfiles/l3a/{year}/{month}/2x2")
-    input_l3c = Path(f"Z:/socfiles/l3c/{year}/{month}")
+    input_l3a = Path(f"Y:/soc/l3a/{year}/{month}/2x2")
+    input_l3c = Path(f"Y:/soc/l3c/{year}/{month}")
 
     output_root = Path(f"outputs_decompose2d_slices/{year}/{month}")
     output_l6 = Path(f"l6/{year}/{month}")

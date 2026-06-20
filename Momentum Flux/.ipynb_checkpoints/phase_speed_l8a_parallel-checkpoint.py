@@ -60,7 +60,7 @@ from netCDF4 import Dataset
 # Folder that contains all L7A files you want to process.
 # Example L7A name:
 #   awe_l7a_tmp_2024075T0538_01770_v23.nc
-L7_FOLDER = Path("l7/2024/03_v23")
+L7_FOLDER = Path("l7/2024/03")
 
 # Folder that contains matching NAVGEM files.
 # Expected NAVGEM name:
@@ -70,7 +70,7 @@ NAVGEM_FOLDER = Path("D:/navgem")
 # Folder that contains matching remap85 L1A files.
 # Expected remap85 name:
 #   awe_l1a_q20_2024075T0538_01770_v23_remap85.nc
-L1A_REMAP_FOLDER = Path("D:/remap85")
+L1A_REMAP_FOLDER = Path("Y:\soc\public\l1a_v23_remap85")
 
 # File search pattern for L7A files.
 L7_GLOB = "awe_l7a_tmp_*_v*.nc"
@@ -1937,7 +1937,7 @@ def save_all_orbits_summary(rows, out_csv):
 USE_PARALLEL = True
 
 # Start small. Increase only if RAM, disk, and network reads are okay.
-N_WORKERS = 4
+N_WORKERS = 6
 
 
 def main():
