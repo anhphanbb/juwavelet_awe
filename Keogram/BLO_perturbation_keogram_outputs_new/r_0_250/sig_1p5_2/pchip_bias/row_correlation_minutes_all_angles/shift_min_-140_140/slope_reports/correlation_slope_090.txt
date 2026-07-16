@@ -1,0 +1,18 @@
+Angle: 90 degrees
+Minutes per pixel: 2.0000000000
+
+UNCORRECTED
+slope_min_per_km: 0.019666856383987855
+intercept_minutes: -0.5539745778789602
+speed_km_per_min: 50.846967124556265
+speed_m_per_s: 847.4494520759378
+r_squared: 0.8761934192777434
+number_of_fit_points: 251
+
+CORRECTED
+slope_min_per_km: 0.018950483779169032
+intercept_minutes: -0.5600455321570857
+speed_km_per_min: 52.7691013935608
+speed_m_per_s: 879.4850232260135
+r_squared: 0.8591388562831683
+number_of_fit_points: 251
