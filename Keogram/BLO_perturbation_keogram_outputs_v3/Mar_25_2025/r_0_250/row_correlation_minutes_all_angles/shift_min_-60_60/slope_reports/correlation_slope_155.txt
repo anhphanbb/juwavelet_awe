@@ -1,0 +1,72 @@
+Angle: 155 degrees
+Minutes per pixel: 2.0000000000
+
+UNCORRECTED
+slope_min_per_km: -0.018531315498080618
+intercept_minutes: 0.3471537424636251
+speed_km_per_min: -53.962709776517215
+speed_m_per_s: -899.3784962752869
+r_squared: 0.5194021248587137
+number_of_fit_points: 103
+number_of_outliers_removed: 148
+outlier_mask: [False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False  True  True  True  True
+  True  True False False False False  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True False False
+ False False False False False  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True]
+
+CORRECTED
+slope_min_per_km: -0.018531315498080618
+intercept_minutes: 0.3471537424636251
+speed_km_per_min: -53.962709776517215
+speed_m_per_s: -899.3784962752869
+r_squared: 0.5194021248587137
+number_of_fit_points: 103
+number_of_outliers_removed: 148
+outlier_mask: [False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False  True  True  True  True
+  True  True False False False False  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True False False
+ False False False False False  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True]
+
+0 KM CORRELATION-PROFILE LOCAL MAXIMA
+Uncorrected left shift (min): -22.0
+Uncorrected left correlation: 0.8805569535566014
+Uncorrected right shift (min): 22.0
+Uncorrected right correlation: 0.8805569535566014
+Corrected left shift (min): -22.0
+Corrected left correlation: 0.8805569535566014
+Corrected right shift (min): 22.0
+Corrected right correlation: 0.8805569535566014

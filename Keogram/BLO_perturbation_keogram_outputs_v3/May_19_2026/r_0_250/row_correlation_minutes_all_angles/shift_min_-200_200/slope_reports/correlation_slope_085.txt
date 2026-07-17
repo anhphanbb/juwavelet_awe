@@ -2,20 +2,64 @@ Angle: 85 degrees
 Minutes per pixel: 2.0000000000
 
 UNCORRECTED
-slope_min_per_km: 0.129765129956365
-intercept_minutes: -15.575222917852395
-speed_km_per_min: 7.7062304822278636
-speed_m_per_s: 128.43717470379772
-r_squared: 0.02633479435103936
-number_of_fit_points: 251
+slope_min_per_km: -1.2027713240235862e-18
+intercept_minutes: 1.9999999999999998
+speed_km_per_min: nan
+speed_m_per_s: nan
+r_squared: nan
+number_of_fit_points: 116
+number_of_outliers_removed: 135
+outlier_mask: [ True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True False False
+ False False False False False False False False False False False False
+ False False False False False False  True  True  True  True  True False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False  True  True False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True]
 
 CORRECTED
-slope_min_per_km: 0.129765129956365
-intercept_minutes: -15.575222917852395
-speed_km_per_min: 7.7062304822278636
-speed_m_per_s: 128.43717470379772
-r_squared: 0.02633479435103936
-number_of_fit_points: 251
+slope_min_per_km: -1.2027713240235862e-18
+intercept_minutes: 1.9999999999999998
+speed_km_per_min: nan
+speed_m_per_s: nan
+r_squared: nan
+number_of_fit_points: 116
+number_of_outliers_removed: 135
+outlier_mask: [ True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True False False
+ False False False False False False False False False False False False
+ False False False False False False  True  True  True  True  True False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False  True  True False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True]
 
 0 KM CORRELATION-PROFILE LOCAL MAXIMA
 Uncorrected left shift (min): -166.0

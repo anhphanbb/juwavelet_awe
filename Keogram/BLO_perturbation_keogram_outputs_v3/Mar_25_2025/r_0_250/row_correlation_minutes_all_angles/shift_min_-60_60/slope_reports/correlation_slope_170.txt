@@ -1,0 +1,72 @@
+Angle: 170 degrees
+Minutes per pixel: 2.0000000000
+
+UNCORRECTED
+slope_min_per_km: -0.02543860368483369
+intercept_minutes: 0.46527296064592233
+speed_km_per_min: -39.31033371128749
+speed_m_per_s: -655.1722285214582
+r_squared: 0.7306532280588343
+number_of_fit_points: 112
+number_of_outliers_removed: 139
+outlier_mask: [False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False  True  True
+  True  True  True  True  True  True  True  True  True  True  True False
+ False False False False False  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True]
+
+CORRECTED
+slope_min_per_km: -0.02543860368483369
+intercept_minutes: 0.46527296064592233
+speed_km_per_min: -39.31033371128749
+speed_m_per_s: -655.1722285214582
+r_squared: 0.7306532280588343
+number_of_fit_points: 112
+number_of_outliers_removed: 139
+outlier_mask: [False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False  True  True
+  True  True  True  True  True  True  True  True  True  True  True False
+ False False False False False  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True]
+
+0 KM CORRELATION-PROFILE LOCAL MAXIMA
+Uncorrected left shift (min): -22.0
+Uncorrected left correlation: 0.8805931766898291
+Uncorrected right shift (min): 22.0
+Uncorrected right correlation: 0.8805931766898291
+Corrected left shift (min): -22.0
+Corrected left correlation: 0.8805931766898291
+Corrected right shift (min): 22.0
+Corrected right correlation: 0.8805931766898291

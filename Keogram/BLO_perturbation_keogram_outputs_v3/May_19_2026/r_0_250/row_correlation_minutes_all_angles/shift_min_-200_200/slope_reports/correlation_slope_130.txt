@@ -2,20 +2,64 @@ Angle: 130 degrees
 Minutes per pixel: 2.0000000000
 
 UNCORRECTED
-slope_min_per_km: -0.16569000189717323
-intercept_minutes: -0.085562511857335
-speed_km_per_min: -6.035367182991508
-speed_m_per_s: -100.58945304985848
-r_squared: 0.04606298483178095
-number_of_fit_points: 251
+slope_min_per_km: -0.013193052233911566
+intercept_minutes: 0.7163228055627534
+speed_km_per_min: -75.79747144709918
+speed_m_per_s: -1263.2911907849864
+r_squared: 0.597154643191206
+number_of_fit_points: 208
+number_of_outliers_removed: 43
+outlier_mask: [False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False]
 
 CORRECTED
-slope_min_per_km: -0.16569000189717323
-intercept_minutes: -0.085562511857335
-speed_km_per_min: -6.035367182991508
-speed_m_per_s: -100.58945304985848
-r_squared: 0.04606298483178095
-number_of_fit_points: 251
+slope_min_per_km: -0.013193052233911566
+intercept_minutes: 0.7163228055627534
+speed_km_per_min: -75.79747144709918
+speed_m_per_s: -1263.2911907849864
+r_squared: 0.597154643191206
+number_of_fit_points: 208
+number_of_outliers_removed: 43
+outlier_mask: [False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True  True  True  True
+  True  True  True  True False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False  True  True  True  True  True  True  True  True  True
+  True  True  True  True  True  True  True  True  True False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False False
+ False False False False False False False False False False False]
 
 0 KM CORRELATION-PROFILE LOCAL MAXIMA
 Uncorrected left shift (min): -164.0
