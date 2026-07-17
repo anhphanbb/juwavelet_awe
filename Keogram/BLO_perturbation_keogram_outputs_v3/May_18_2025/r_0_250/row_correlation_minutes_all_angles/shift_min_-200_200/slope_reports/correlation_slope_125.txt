@@ -1,0 +1,28 @@
+Angle: 125 degrees
+Minutes per pixel: 2.0000000000
+
+UNCORRECTED
+slope_min_per_km: 0.021605008537279452
+intercept_minutes: 0.14399544678429158
+speed_km_per_min: 46.28556375131718
+speed_m_per_s: 771.4260625219529
+r_squared: 0.8301541212691039
+number_of_fit_points: 251
+
+CORRECTED
+slope_min_per_km: 0.021605008537279452
+intercept_minutes: 0.14399544678429158
+speed_km_per_min: 46.28556375131718
+speed_m_per_s: 771.4260625219529
+r_squared: 0.8301541212691039
+number_of_fit_points: 251
+
+0 KM CORRELATION-PROFILE LOCAL MAXIMA
+Uncorrected left shift (min): -80.0
+Uncorrected left correlation: -0.08977229992339382
+Uncorrected right shift (min): 80.0
+Uncorrected right correlation: -0.08977229992339382
+Corrected left shift (min): -80.0
+Corrected left correlation: -0.08977229992339382
+Corrected right shift (min): 80.0
+Corrected right correlation: -0.08977229992339382

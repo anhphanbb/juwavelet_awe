@@ -10,11 +10,11 @@ r_squared: 0.9154328172347819
 number_of_fit_points: 251
 
 CORRECTED
-slope_min_per_km: 0.026007968127490042
-intercept_minutes: -0.01593625498007896
-speed_km_per_min: 38.44975490196078
-speed_m_per_s: 640.8292483660131
-r_squared: 0.9159554565701559
+slope_min_per_km: 0.025960918231834565
+intercept_minutes: 0.013849364446974424
+speed_km_per_min: 38.519438760596316
+speed_m_per_s: 641.9906460099386
+r_squared: 0.9154328172347819
 number_of_fit_points: 251
 
 0 KM CORRELATION-PROFILE LOCAL MAXIMA
