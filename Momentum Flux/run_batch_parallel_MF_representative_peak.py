@@ -961,9 +961,9 @@ def create_passed_only_l6a_with_new_vars(
             _write("MFm_top", MFm_top, temp_dims, "Stitched meridional MF share on top tile rows only", "m2 s-2")
 
             # Flattened toprows Temperature, Latitude, Longitude aligned with MF_top
-#            T_top = np.full(temp_shape, np.nan, dtype=np.float32)
-#            Lat_top = np.full(temp_shape, np.nan, dtype=np.float32)
-#            Lon_top = np.full(temp_shape, np.nan, dtype=np.float32)
+            T_top = np.full(temp_shape, np.nan, dtype=np.float32)
+            Lat_top = np.full(temp_shape, np.nan, dtype=np.float32)
+            Lon_top = np.full(temp_shape, np.nan, dtype=np.float32)
 
 #            nx_out = temp_shape[2]
 #            nx_copy = min(nx_out, temp_full_2d.shape[1])
